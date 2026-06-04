@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`}>
+    <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
