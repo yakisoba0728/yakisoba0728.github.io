@@ -1,0 +1,17 @@
+---
+title: Next.js App Router로 정적 사이트 만들기
+date: 2026-05-28
+summary: App Router의 SSG와 generateStaticParams를 활용한 콘텐츠 사이트 구성 메모.
+tags: [Next.js, 프론트엔드]
+published: true
+---
+
+App Router에서는 `generateStaticParams`로 빌드 타임에 경로를 생성할 수 있습니다.
+
+```tsx
+export function generateStaticParams() {
+  return getAllPosts().map((p) => ({ slug: p.slug }))
+}
+```
+
+덕분에 별도 서버 없이도 빠른 정적 페이지를 얻습니다.
