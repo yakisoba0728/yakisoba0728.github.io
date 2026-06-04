@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Reveal from '@/components/Reveal'
 import ProjectCard from '@/components/ProjectCard'
+import T from '@/components/T'
 import { profile } from '@/content/profile'
 import { getFeaturedProjects } from '@/lib/content'
 
@@ -15,9 +16,9 @@ export default function Bento() {
         {/* About */}
         <div className="glass card-hover bento-card col-4">
           <p className="section-label">{'// ABOUT'}</p>
-          <p className="mt-4 text-lg leading-relaxed text-fg/90">{profile.bioShort}</p>
+          <p className="mt-4 text-lg leading-relaxed text-fg/90"><T ko={profile.bioShort} en={profile.bioShortEn} /></p>
           <Link href="/about" className="mt-4 inline-block text-sm text-accent-2 hover:underline">
-            자기소개 더 보기 →
+            <T ko="자기소개 더 보기 →" en="More about me →" />
           </Link>
         </div>
 
@@ -28,7 +29,7 @@ export default function Bento() {
             {profile.now.map((item, i) => (
               <li key={i} className="flex gap-2.5 text-sm leading-relaxed text-muted">
                 <span className="pill-dot mt-1.5 shrink-0" />
-                {item}
+                <T ko={item} en={profile.nowEn[i]} />
               </li>
             ))}
           </ul>
@@ -57,9 +58,12 @@ export default function Bento() {
           <ul className="mt-4 flex flex-col gap-3">
             {profile.activities.map((a, i) => (
               <li key={i}>
-                <p className="text-sm text-fg">{a.title}</p>
+                <p className="text-sm text-fg"><T ko={a.title} en={profile.activitiesEn[i].title} /></p>
                 <p className="font-display text-xs text-muted-2">
-                  {[a.org, a.period].filter(Boolean).join(' · ')}
+                  <T
+                    ko={[a.org, a.period].filter(Boolean).join(' · ')}
+                    en={[profile.activitiesEn[i].org, profile.activitiesEn[i].period].filter(Boolean).join(' · ')}
+                  />
                 </p>
               </li>
             ))}
