@@ -22,8 +22,19 @@ export default function Particles({ count = 22 }: { count?: number }) {
       frag.appendChild(p)
     }
     host.appendChild(frag)
+    let raf = 0
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        host.style.transform = `translate3d(0, ${window.scrollY * 0.12}px, 0)`
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
       host.replaceChildren()
+      host.style.transform = ''
     }
   }, [count])
   return <div className="particles" ref={ref} aria-hidden />
