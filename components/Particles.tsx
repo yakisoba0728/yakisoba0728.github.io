@@ -8,8 +8,9 @@ export default function Particles({ count = 22 }: { count?: number }) {
     const host = ref.current
     if (!host) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const n = window.innerWidth < 640 ? Math.round(count * 0.5) : count
     const frag = document.createDocumentFragment()
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < n; i++) {
       const p = document.createElement('span')
       p.className = 'particle'
       const size = Math.random() * 3 + 1.5
