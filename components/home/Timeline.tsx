@@ -1,5 +1,6 @@
 import Reveal from '@/components/Reveal'
 import { profile } from '@/content/profile'
+import T from '@/components/T'
 
 export default function Timeline() {
   return (
@@ -26,8 +27,8 @@ export default function Timeline() {
         <Reveal stagger className="mt-6 flex flex-col gap-4">
           {profile.education.map((e, i) => (
             <div key={i} className="glass flex flex-col gap-4 p-6 sm:flex-row">
-              <div className="font-display text-sm text-accent-2 sm:w-40 sm:shrink-0">{e.period}</div>
-              <h3 className="font-semibold text-fg">{e.degree} · {e.org}</h3>
+              <div className="font-display text-sm text-accent-2 sm:w-40 sm:shrink-0"><T ko={e.period} en={profile.educationEn[i].period} /></div>
+              <h3 className="font-semibold text-fg"><T ko={`${e.degree} · ${e.org}`} en={`${profile.educationEn[i].degree} · ${profile.educationEn[i].org}`} /></h3>
             </div>
           ))}
         </Reveal>
