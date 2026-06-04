@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Mail, Menu, X } from 'lucide-react'
 import { GithubIcon, InstagramIcon } from '@/components/icons'
 import { profile } from '@/content/profile'
 
@@ -52,6 +52,11 @@ export default function Nav() {
               <InstagramIcon size={18} />
             </a>
           )}
+          {profile.socials.email && (
+            <a href={`mailto:${profile.socials.email}`} className="px-1 text-muted hover:text-accent-2" aria-label="Email">
+              <Mail size={18} />
+            </a>
+          )}
         </div>
 
         <button className="text-muted md:hidden" onClick={() => setOpen(!open)} aria-label="메뉴 토글">
@@ -79,6 +84,11 @@ export default function Nav() {
               {profile.socials.instagram && (
                 <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="text-muted hover:text-accent-2" aria-label="Instagram">
                   <InstagramIcon size={18} />
+                </a>
+              )}
+              {profile.socials.email && (
+                <a href={`mailto:${profile.socials.email}`} className="text-muted hover:text-accent-2" aria-label="Email">
+                  <Mail size={18} />
                 </a>
               )}
             </div>
