@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`}>
-      <body className="bg-bg text-fg font-sans antialiased">
+      <body className="bg-bg text-fg font-sans antialiased" suppressHydrationWarning>
         <div className="glow-bg" aria-hidden />
         <Nav />
         <main className="relative z-[1] mx-auto max-w-[1080px] px-6">{children}</main>
