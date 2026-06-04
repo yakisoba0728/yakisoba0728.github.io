@@ -12,7 +12,7 @@ export default function Hero() {
       </Reveal>
       <Reveal>
         <p className="mt-6 font-display text-lg font-medium text-muted"><T ko={profile.name} en={profile.nameEn} /></p>
-        <h1 className="mt-2 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+        <h1 className="mt-2 text-[clamp(2rem,8vw,3.75rem)] font-extrabold leading-[1.05] tracking-tight">
           <span className="gradient-text"><T ko={profile.tagline} en={profile.taglineEn} /></span>
         </h1>
       </Reveal>
