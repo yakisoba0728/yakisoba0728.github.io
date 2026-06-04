@@ -28,7 +28,7 @@ export default function Nav() {
       <nav className="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5 font-display text-[17px] font-bold tracking-tight">
           <span className="h-[11px] w-[11px] rounded-[3px]" style={{ background: 'var(--grad)', boxShadow: '0 0 12px rgba(124,58,237,.7)' }} />
-          {profile.name}
+          <span className="glitch" data-text={profile.name}>{profile.name}</span>
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
