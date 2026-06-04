@@ -125,6 +125,22 @@ body { background-color: var(--color-bg); color: var(--color-fg); overflow-x: hi
 .counter-label { color: var(--color-muted); font-size: 13px; margin-top: 8px; }
 @media (max-width: 640px) { .counters { grid-template-columns: 1fr; } }
 
+/* ---- bento grid ---- */
+.bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.bento-card { padding: 24px; }
+.col-2 { grid-column: span 2; }
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+@media (max-width: 900px) {
+  .bento { grid-template-columns: repeat(2, 1fr); }
+  .col-2, .col-3, .col-4, .col-6 { grid-column: span 2; }
+}
+@media (max-width: 560px) {
+  .bento { grid-template-columns: 1fr; }
+  .col-2, .col-3, .col-4, .col-6 { grid-column: span 1; }
+}
+
 /* ---- 모션 민감성 존중 ---- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0s !important; transition-duration: 0.001ms !important; }

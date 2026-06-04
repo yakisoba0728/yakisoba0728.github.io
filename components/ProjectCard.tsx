@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { ViewTransition } from 'react'
 import type { Project } from '@/lib/types'
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({ project, className = '' }: { project: Project; className?: string }) {
   const { slug, frontmatter } = project
   return (
-    <Link href={`/portfolio/${slug}`} className="group glass card-hover flex flex-col overflow-hidden">
+    <Link href={`/portfolio/${slug}`} className={`group glass card-hover flex flex-col overflow-hidden ${className}`}>
       <ViewTransition name={`project-${slug}`} share="morph">
         <div className="flex h-32 items-center justify-center" style={{ background: 'linear-gradient(120deg, rgba(124,58,237,.18), rgba(34,211,238,.12))' }}>
           <span className="font-display text-sm text-muted">{frontmatter.period}</span>
