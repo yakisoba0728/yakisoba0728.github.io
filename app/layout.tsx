@@ -38,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <head>
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `try{if(localStorage.getItem('lang')==='en')document.documentElement.setAttribute('data-lang','en')}catch(e){}`,
           }}
