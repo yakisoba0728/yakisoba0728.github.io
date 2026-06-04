@@ -3,7 +3,7 @@ import { profile } from '@/content/profile'
 export default function Timeline() {
   return (
     <section className="border-t border-border py-16">
-      <p className="font-mono text-sm text-accent-2">// experience</p>
+      <p className="font-mono text-sm text-accent-2">{"// experience"}</p>
       <ol className="mt-6 space-y-6 border-l border-border pl-6">
         {profile.experience.map((e, i) => (
           <li key={i} className="relative">
@@ -17,7 +17,7 @@ export default function Timeline() {
         ))}
       </ol>
 
-      <p className="mt-12 font-mono text-sm text-accent-2">// education</p>
+      <p className="mt-12 font-mono text-sm text-accent-2">{"// education"}</p>
       <ol className="mt-6 space-y-6 border-l border-border pl-6">
         {profile.education.map((e, i) => (
           <li key={i} className="relative">

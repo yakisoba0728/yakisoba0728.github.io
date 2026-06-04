@@ -8,7 +8,7 @@ export default function FeaturedProjects() {
   return (
     <section className="border-t border-border py-16">
       <div className="flex items-center justify-between">
-        <p className="font-mono text-sm text-accent">// featured projects</p>
+        <p className="font-mono text-sm text-accent">{"// featured projects"}</p>
         <Link href="/portfolio" className="text-sm text-muted hover:text-fg">
           전체 보기 →
         </Link>
