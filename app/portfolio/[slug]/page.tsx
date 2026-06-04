@@ -6,6 +6,7 @@ import { ExternalLink } from 'lucide-react'
 import { GithubIcon } from '@/components/icons'
 import { getAllProjects, getProject } from '@/lib/content'
 import { Mdx } from '@/components/mdx'
+import T from '@/components/T'
 
 export const dynamicParams = false
 
@@ -28,7 +29,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   return (
     <article className="py-16">
-      <Link href="/portfolio" className="font-display text-sm text-muted hover:text-fg">← 포트폴리오</Link>
+      <Link href="/portfolio" className="font-display text-sm text-muted hover:text-fg"><T ko="← 포트폴리오" en="← Portfolio" /></Link>
 
       <ViewTransition name={`project-${slug}`} share="morph">
         <div className="mt-4 flex h-44 items-end overflow-hidden rounded-2xl border border-border p-7" style={{ background: 'linear-gradient(120deg, rgba(124,58,237,.22), rgba(34,211,238,.14))' }}>
@@ -47,12 +48,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <div className="mt-4 flex gap-4">
         {frontmatter.repo && (
           <a href={frontmatter.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-accent-2 hover:underline">
-            <GithubIcon size={15} /> 저장소
+            <GithubIcon size={15} /> <T ko="저장소" en="Repository" />
           </a>
         )}
         {frontmatter.demo && (
           <a href={frontmatter.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-accent-2 hover:underline">
-            <ExternalLink size={15} /> 데모
+            <ExternalLink size={15} /> <T ko="데모" en="Demo" />
           </a>
         )}
       </div>
