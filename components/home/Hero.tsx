@@ -1,26 +1,28 @@
 import Link from 'next/link'
+import Reveal from '@/components/Reveal'
 import { profile } from '@/content/profile'
 
 export default function Hero() {
   return (
-    <section className="py-20 sm:py-28">
-      <p className="font-mono text-sm text-accent">$ whoami</p>
-      <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">{profile.name}</h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted sm:text-xl">{profile.tagline}</p>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link
-          href="/portfolio"
-          className="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-bg transition-opacity hover:opacity-90"
-        >
-          프로젝트 보기 →
-        </Link>
-        <a
-          href="#contact"
-          className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:border-muted"
-        >
-          연락하기
-        </a>
-      </div>
+    <section className="flex min-h-[78vh] flex-col justify-center py-16">
+      <Reveal>
+        <span className="pill"><span className="pill-dot" /> 지금 협업 가능</span>
+      </Reveal>
+      <Reveal>
+        <p className="mt-6 font-display text-lg font-medium text-muted">{profile.name}</p>
+        <h1 className="mt-2 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+          <span className="gradient-text">{profile.tagline}</span>
+        </h1>
+      </Reveal>
+      <Reveal>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{profile.bioShort}</p>
+      </Reveal>
+      <Reveal>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/portfolio" className="btn-grad">프로젝트 보기 →</Link>
+          <Link href="/about" className="btn-glass">자기소개</Link>
+        </div>
+      </Reveal>
     </section>
   )
 }
