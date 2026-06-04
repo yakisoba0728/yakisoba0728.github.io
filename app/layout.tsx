@@ -4,6 +4,9 @@ import localFont from 'next/font/local'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import ScrollProgress from '@/components/ScrollProgress'
+import Particles from '@/components/Particles'
+import BackToTop from '@/components/BackToTop'
 import { profile } from '@/content/profile'
 
 const spaceGrotesk = Space_Grotesk({
@@ -34,10 +37,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`}>
       <body className="bg-bg text-fg font-sans antialiased" suppressHydrationWarning>
+        <ScrollProgress />
         <div className="glow-bg" aria-hidden />
+        <Particles />
         <Nav />
         <main className="relative z-[1] mx-auto max-w-[1080px] px-6">{children}</main>
         <Footer />
+        <BackToTop />
       </body>
     </html>
   )

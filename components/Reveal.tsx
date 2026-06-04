@@ -2,9 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-type Props = React.HTMLAttributes<HTMLDivElement> & { stagger?: boolean }
+type Props = React.HTMLAttributes<HTMLDivElement> & {
+  stagger?: boolean
+  variant?: 'up' | 'left' | 'right' | 'scale' | 'blur'
+}
 
-export default function Reveal({ stagger = false, className = '', children, ...rest }: Props) {
+export default function Reveal({ stagger = false, variant = 'up', className = '', children, ...rest }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const [shown, setShown] = useState(false)
 
@@ -32,7 +35,19 @@ export default function Reveal({ stagger = false, className = '', children, ...r
     return () => io.disconnect()
   }, [])
 
-  const cls = [stagger ? 'stagger' : 'reveal', shown ? 'in' : '', className]
+  const variantClass = stagger
+    ? ''
+    : variant === 'left'
+      ? 'rv-left'
+      : variant === 'right'
+        ? 'rv-right'
+        : variant === 'scale'
+          ? 'rv-scale'
+          : variant === 'blur'
+            ? 'rv-blur'
+            : ''
+
+  const cls = [stagger ? 'stagger' : 'reveal', variantClass, shown ? 'in' : '', className]
     .filter(Boolean)
     .join(' ')
 
