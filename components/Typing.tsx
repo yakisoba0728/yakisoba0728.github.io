@@ -6,8 +6,10 @@ export default function Typing({ phrases, phrasesEn }: { phrases: string[]; phra
   const [text, setText] = useState('')
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const getSet = () =>
-      document.documentElement.getAttribute('data-lang') === 'en' && phrasesEn ? phrasesEn : phrases
+    const getSet = (l?: string) => {
+      const cur = l ?? (document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'ko')
+      return cur === 'en' && phrasesEn ? phrasesEn : phrases
+    }
     let set = getSet()
     let phrase = 0
     let chars = 0
@@ -15,7 +17,7 @@ export default function Typing({ phrases, phrasesEn }: { phrases: string[]; phra
     let timer: ReturnType<typeof setTimeout>
     if (reduce) {
       const id = setTimeout(() => setText(set[0] ?? ''), 0)
-      const onLangReduce = () => { set = getSet(); setTimeout(() => setText(set[0] ?? ''), 0) }
+      const onLangReduce = (e: Event) => { set = getSet((e as CustomEvent<string>).detail); setTimeout(() => setText(set[0] ?? ''), 0) }
       window.addEventListener('langchange', onLangReduce)
       return () => { clearTimeout(id); window.removeEventListener('langchange', onLangReduce) }
     }
@@ -34,7 +36,7 @@ export default function Typing({ phrases, phrasesEn }: { phrases: string[]; phra
       }
     }
     timer = setTimeout(tick, 500)
-    const onLang = () => { set = getSet(); phrase = 0; chars = 0; deleting = false }
+    const onLang = (e: Event) => { set = getSet((e as CustomEvent<string>).detail); phrase = 0; chars = 0; deleting = false }
     window.addEventListener('langchange', onLang)
     return () => { clearTimeout(timer); window.removeEventListener('langchange', onLang) }
   }, [phrases, phrasesEn])

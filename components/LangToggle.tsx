@@ -10,14 +10,15 @@ export default function LangToggle() {
     }, 0)
     return () => clearTimeout(id)
   }, [])
-  const choose = (l: 'ko' | 'en') => {
-    setLang(l)
+  const toggle = () => {
+    const next: 'ko' | 'en' = lang === 'ko' ? 'en' : 'ko'
+    setLang(next)
     const apply = () => {
-      if (l === 'en') document.documentElement.setAttribute('data-lang', 'en')
+      if (next === 'en') document.documentElement.setAttribute('data-lang', 'en')
       else document.documentElement.removeAttribute('data-lang')
     }
     try {
-      localStorage.setItem('lang', l)
+      localStorage.setItem('lang', next)
     } catch {}
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const startVT = (document as Document & { startViewTransition?: (cb: () => void) => void })
@@ -27,12 +28,17 @@ export default function LangToggle() {
     } else {
       apply()
     }
-    window.dispatchEvent(new CustomEvent('langchange', { detail: l }))
+    window.dispatchEvent(new CustomEvent('langchange', { detail: next }))
   }
   return (
-    <div className="lang-toggle" role="group" aria-label="Language">
-      <button type="button" className={lang === 'ko' ? 'on' : ''} onClick={() => choose('ko')} aria-pressed={lang === 'ko'}>KO</button>
-      <button type="button" className={lang === 'en' ? 'on' : ''} onClick={() => choose('en')} aria-pressed={lang === 'en'}>EN</button>
-    </div>
+    <button
+      type="button"
+      className="lang-toggle"
+      onClick={toggle}
+      aria-label={`Switch language — current ${lang.toUpperCase()}`}
+    >
+      <span className={lang === 'ko' ? 'on' : ''}>KO</span>
+      <span className={lang === 'en' ? 'on' : ''}>EN</span>
+    </button>
   )
 }
