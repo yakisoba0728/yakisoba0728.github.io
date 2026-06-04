@@ -1,3 +1,4 @@
+import { Mail } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import { GithubIcon, InstagramIcon } from '@/components/icons'
 import { profile } from '@/content/profile'
@@ -10,8 +11,11 @@ export default function ContactCTA() {
           <h2 className="text-3xl font-bold tracking-tight">함께 좋은 제품을 만들어요</h2>
           <p className="mt-3 text-muted">새로운 기회와 협업에 열려 있습니다.</p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
+            {profile.socials.email && (
+              <a href={`mailto:${profile.socials.email}`} className="btn-grad"><Mail size={16} /> 이메일 보내기</a>
+            )}
             {profile.socials.instagram && (
-              <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="btn-grad"><InstagramIcon size={16} /> Instagram</a>
+              <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="btn-glass"><InstagramIcon size={16} /> Instagram</a>
             )}
             <a href={profile.socials.github} target="_blank" rel="noreferrer" className="btn-glass"><GithubIcon size={16} /> GitHub</a>
           </div>

@@ -3,14 +3,6 @@ import Reveal from '@/components/Reveal'
 import Typing from '@/components/Typing'
 import { profile } from '@/content/profile'
 
-const TYPING = [
-  '에이전틱 엔지니어링',
-  '스펙 주도 개발 (Spec-Driven)',
-  '컨텍스트 엔지니어링',
-  '빠른 프로토타이핑',
-  '만들고 싶은 걸 만든다',
-]
-
 export default function Hero() {
   return (
     <section className="flex min-h-[78vh] flex-col justify-center py-16">
@@ -25,7 +17,7 @@ export default function Hero() {
       </Reveal>
       <Reveal>
         <p className="mt-4 font-display text-base text-accent-2">
-          <Typing phrases={TYPING} />
+          <Typing phrases={profile.roles} />
         </p>
       </Reveal>
       <Reveal>
