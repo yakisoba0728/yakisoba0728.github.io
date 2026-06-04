@@ -1,6 +1,7 @@
 export interface SocialLinks {
   github: string
-  email: string
+  instagram?: string
+  email?: string
   linkedin?: string
 }
 export interface SkillGroup {
@@ -29,27 +30,22 @@ export interface Profile {
 }
 
 export const profile: Profile = {
-  name: '홍길동',
-  tagline: '문제를 코드로 푸는 백엔드 개발자입니다.',
+  name: '김동혁',
+  tagline: 'AI 에이전트로 만들고 싶은 걸 완성하는 에이전틱 엔지니어',
   bioShort:
-    '안정적이고 확장 가능한 백엔드 시스템을 설계하고 운영하는 것을 좋아합니다. 작은 개선을 꾸준히 쌓아 사용자에게 가치를 전달하는 데 집중합니다.',
+    '바이브코딩을 넘어, AI 에이전트를 오케스트레이션해 제품을 만듭니다. 경북소프트웨어마이스터고등학교에 재학 중이며, 명확한 스펙과 컨텍스트로 익숙하지 않은 언어·스택도 실제로 동작하는 제품으로 완성합니다. 만들고 싶은 게 생기면 일단 만들어보는 편이에요.',
   socials: {
-    github: 'https://github.com/yourname',
-    email: 'you@example.com',
-    linkedin: 'https://www.linkedin.com/in/yourname',
+    github: 'https://github.com/yakisoba0728',
+    instagram: 'https://www.instagram.com/yakisoba0728/',
   },
   skills: [
-    { category: 'Languages', items: ['TypeScript', 'Go', 'Python'] },
-    { category: 'Backend', items: ['Node.js', 'NestJS', 'PostgreSQL', 'Redis'] },
-    { category: 'Infra', items: ['Docker', 'Kubernetes', 'AWS'] },
+    { category: 'Languages', items: ['Python', 'Node.js', 'Java'] },
+    { category: 'AI / ML', items: ['PyTorch', 'Hugging Face', 'vLLM', 'Ollama'] },
+    { category: 'Web', items: ['Next.js', 'React', 'Tailwind CSS'] },
+    { category: 'Infra / Tools', items: ['Docker', 'AWS', 'Vercel', 'Git'] },
   ],
-  experience: [
-    {
-      org: 'OOO 컴퍼니',
-      role: 'Backend Engineer',
-      period: '2023.01 – 현재',
-      summary: '결제 시스템 백엔드 설계 및 운영, 일 평균 트래픽 30% 처리 개선.',
-    },
+  experience: [],
+  education: [
+    { org: '경북소프트웨어마이스터고등학교', degree: '소프트웨어 개발', period: '재학 중' },
   ],
-  education: [{ org: 'OO대학교', degree: '컴퓨터공학 학사', period: '2017 – 2023' }],
 }
