@@ -17,7 +17,7 @@ export default function Hero() {
       </Reveal>
       <Reveal>
         <p className="mt-4 font-display text-base text-accent-2">
-          <Typing phrases={profile.roles} />
+          <Typing phrases={profile.roles} phrasesEn={profile.rolesEn} />
         </p>
       </Reveal>
       <Reveal>
