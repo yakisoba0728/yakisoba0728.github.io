@@ -10,7 +10,7 @@ export default function FeaturedProjects() {
     <section className="py-14">
       <Reveal>
         <div className="flex items-center justify-between">
-          <p className="section-label">// FEATURED PROJECTS</p>
+          <p className="section-label">{'// FEATURED PROJECTS'}</p>
           <Link href="/portfolio" className="text-sm text-muted hover:text-fg">전체 보기 →</Link>
         </div>
       </Reveal>
