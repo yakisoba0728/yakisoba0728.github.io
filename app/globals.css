@@ -28,6 +28,9 @@
 html { scroll-behavior: smooth; }
 body { background-color: var(--color-bg); color: var(--color-fg); overflow-x: hidden; }
 
+/* 키보드 포커스 링 */
+:focus-visible { outline: 2px solid var(--color-accent-2); outline-offset: 2px; border-radius: 6px; }
+
 /* ---- 고정 배경 글로우 ---- */
 .glow-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .glow-bg::before, .glow-bg::after { content: ""; position: absolute; border-radius: 50%; filter: blur(70px); }
@@ -71,7 +74,8 @@ body { background-color: var(--color-bg); color: var(--color-fg); overflow-x: hi
 
 /* 헤더 고정(전환 중 흔들림 방지) */
 ::view-transition-group(site-header) { animation: none; z-index: 100; }
-::view-transition-old(site-header), ::view-transition-new(site-header) { animation: none; }
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
 
 /* 포트폴리오 썸네일 → 상세 morph */
 ::view-transition-group(.morph) { animation-duration: 420ms; }
