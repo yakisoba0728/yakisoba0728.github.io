@@ -15,7 +15,7 @@ const components = {
 
 export function Mdx({ source }: { source: string }) {
   return (
-    <div className="prose prose-invert max-w-none prose-headings:scroll-mt-24 prose-pre:border prose-pre:border-border prose-pre:bg-surface">
+    <div className="prose prose-invert max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:scroll-mt-24 prose-a:text-accent-2 prose-pre:rounded-xl prose-pre:border prose-pre:border-border prose-code:text-accent-2">
       <MDXRemote
         source={source}
         components={components}
