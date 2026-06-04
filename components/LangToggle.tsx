@@ -12,11 +12,21 @@ export default function LangToggle() {
   }, [])
   const choose = (l: 'ko' | 'en') => {
     setLang(l)
-    if (l === 'en') document.documentElement.setAttribute('data-lang', 'en')
-    else document.documentElement.removeAttribute('data-lang')
+    const apply = () => {
+      if (l === 'en') document.documentElement.setAttribute('data-lang', 'en')
+      else document.documentElement.removeAttribute('data-lang')
+    }
     try {
       localStorage.setItem('lang', l)
     } catch {}
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const startVT = (document as Document & { startViewTransition?: (cb: () => void) => void })
+      .startViewTransition
+    if (!reduce && typeof startVT === 'function') {
+      startVT.call(document, apply)
+    } else {
+      apply()
+    }
     window.dispatchEvent(new CustomEvent('langchange', { detail: l }))
   }
   return (
