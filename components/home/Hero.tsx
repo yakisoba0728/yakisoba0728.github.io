@@ -1,6 +1,15 @@
 import Link from 'next/link'
 import Reveal from '@/components/Reveal'
+import Typing from '@/components/Typing'
 import { profile } from '@/content/profile'
+
+const TYPING = [
+  '에이전틱 엔지니어링',
+  '스펙 주도 개발 (Spec-Driven)',
+  '컨텍스트 엔지니어링',
+  '빠른 프로토타이핑',
+  '만들고 싶은 걸 만든다',
+]
 
 export default function Hero() {
   return (
@@ -15,7 +24,12 @@ export default function Hero() {
         </h1>
       </Reveal>
       <Reveal>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{profile.bioShort}</p>
+        <p className="mt-4 font-display text-base text-accent-2">
+          <Typing phrases={TYPING} />
+        </p>
+      </Reveal>
+      <Reveal>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">{profile.lead}</p>
       </Reveal>
       <Reveal>
         <div className="mt-8 flex flex-wrap gap-3">

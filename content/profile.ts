@@ -22,7 +22,9 @@ export interface EducationItem {
 export interface Profile {
   name: string
   tagline: string
+  lead: string
   bioShort: string
+  bioLong: string[]
   socials: SocialLinks
   skills: SkillGroup[]
   experience: ExperienceItem[]
@@ -32,8 +34,13 @@ export interface Profile {
 export const profile: Profile = {
   name: '김동혁',
   tagline: 'AI 에이전트로 만들고 싶은 걸 완성하는 에이전틱 엔지니어',
+  lead: 'AI 에이전트와 함께, 아이디어를 빠르게 동작하는 제품으로 만듭니다.',
   bioShort:
-    '바이브코딩을 넘어, AI 에이전트를 오케스트레이션해 제품을 만듭니다. 경북소프트웨어마이스터고등학교에 재학 중이며, 명확한 스펙과 컨텍스트로 익숙하지 않은 언어·스택도 실제로 동작하는 제품으로 완성합니다. 만들고 싶은 게 생기면 일단 만들어보는 편이에요.',
+    '바이브코딩을 넘어 AI 에이전트를 오케스트레이션하는 에이전틱 엔지니어예요. 익숙하지 않은 언어·스택도 명확한 스펙과 컨텍스트로 빠르게 완성합니다.',
+  bioLong: [
+    '바이브코딩을 넘어, AI 에이전트를 오케스트레이션해 제품을 만드는 에이전틱 엔지니어입니다. 경북소프트웨어마이스터고등학교에 재학 중이에요.',
+    '명확한 스펙과 컨텍스트를 설계해, 익숙하지 않은 언어·스택도 실제로 동작하는 제품으로 빠르게 완성합니다. 만들고 싶은 게 생기면 일단 만들어보는 편이에요.',
+  ],
   socials: {
     github: 'https://github.com/yakisoba0728',
     instagram: 'https://www.instagram.com/yakisoba0728/',

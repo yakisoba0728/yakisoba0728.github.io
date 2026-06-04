@@ -9,7 +9,7 @@ export default function PortfolioPage() {
   const projects = getAllProjects()
   return (
     <div className="py-16">
-      <Reveal>
+      <Reveal variant="left">
         <p className="section-label">{'// PORTFOLIO'}</p>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight">만든 <span className="gradient-text">것들</span></h1>
       </Reveal>
