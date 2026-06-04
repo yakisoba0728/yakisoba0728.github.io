@@ -36,6 +36,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('lang')==='en')document.documentElement.setAttribute('data-lang','en')}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="bg-bg text-fg font-sans antialiased" suppressHydrationWarning>
         <ScrollProgress />
         <div className="glow-bg" aria-hidden />

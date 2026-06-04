@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export type CounterItem = { label: string; value: number; suffix?: string }
+export type CounterItem = { label: React.ReactNode; value: number; suffix?: string }
 
 function CountUp({ to, run }: { to: number; run: boolean }) {
   const [n, setN] = useState(0)
@@ -50,8 +50,8 @@ export default function Counters({ items }: { items: CounterItem[] }) {
   }, [])
   return (
     <div className="counters" ref={ref}>
-      {items.map((it) => (
-        <div className="glass counter" key={it.label}>
+      {items.map((it, i) => (
+        <div className="glass counter" key={i}>
           <div className="counter-num gradient-text">
             <CountUp to={it.value} run={run} />
             {it.suffix}

@@ -6,12 +6,14 @@ import { useState } from 'react'
 import { Mail, Menu, X } from 'lucide-react'
 import { GithubIcon, InstagramIcon } from '@/components/icons'
 import { profile } from '@/content/profile'
+import T from '@/components/T'
+import LangToggle from '@/components/LangToggle'
 
 const links = [
-  { href: '/', label: '홈' },
-  { href: '/about', label: '자기소개' },
-  { href: '/portfolio', label: '포트폴리오' },
-  { href: '/blog', label: '블로그' },
+  { href: '/', ko: '홈', en: 'Home' },
+  { href: '/about', ko: '자기소개', en: 'About' },
+  { href: '/portfolio', ko: '포트폴리오', en: 'Portfolio' },
+  { href: '/blog', ko: '블로그', en: 'Blog' },
 ]
 
 export default function Nav() {
@@ -28,7 +30,9 @@ export default function Nav() {
       <nav className="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5 font-display text-[17px] font-bold tracking-tight">
           <span className="h-[11px] w-[11px] rounded-[3px]" style={{ background: 'var(--grad)', boxShadow: '0 0 12px rgba(124,58,237,.7)' }} />
-          <span className="glitch" data-text={profile.name}>{profile.name}</span>
+          <span className="glitch" data-text={profile.name}>
+            <T ko={profile.name} en={profile.nameEn} />
+          </span>
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
@@ -40,10 +44,12 @@ export default function Nav() {
                 isActive(l.href) ? 'text-fg' : 'text-muted'
               }`}
             >
-              {l.label}
+              <T ko={l.ko} en={l.en} />
             </Link>
           ))}
           <span className="mx-2 h-4 w-px bg-border" />
+          <LangToggle />
+          <span className="mx-1 h-4 w-px bg-border" />
           <a href={profile.socials.github} target="_blank" rel="noreferrer" className="px-1 text-muted hover:text-accent-2" aria-label="GitHub">
             <GithubIcon size={18} />
           </a>
@@ -74,10 +80,12 @@ export default function Nav() {
                 onClick={() => setOpen(false)}
                 className={`py-2 text-sm ${isActive(l.href) ? 'text-fg' : 'text-muted'}`}
               >
-                {l.label}
+                <T ko={l.ko} en={l.en} />
               </Link>
             ))}
-            <div className="mt-2 flex gap-4">
+            <div className="mt-2 flex items-center gap-4">
+              <LangToggle />
+              <span className="h-4 w-px bg-border" />
               <a href={profile.socials.github} target="_blank" rel="noreferrer" className="text-muted hover:text-accent-2" aria-label="GitHub">
                 <GithubIcon size={18} />
               </a>
