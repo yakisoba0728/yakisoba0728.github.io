@@ -9,7 +9,7 @@ export default function BlogPage() {
   const posts = getAllPosts()
   return (
     <div className="py-16">
-      <Reveal>
+      <Reveal variant="right">
         <p className="section-label">{'// BLOG'}</p>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight">글 <span className="gradient-text">쓰기</span></h1>
       </Reveal>

@@ -15,7 +15,9 @@ export default function AboutPage() {
           <h1 className="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">
             안녕하세요,<br /><span className="gradient-text">{profile.name}</span>입니다.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{profile.bioShort}</p>
+          {profile.bioLong.map((para, i) => (
+            <p key={i} className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{para}</p>
+          ))}
         </Reveal>
       </section>
       <Skills />
