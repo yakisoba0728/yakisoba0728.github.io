@@ -33,6 +33,10 @@ export interface Profile {
   leadEn: string
   roles: string[]
   rolesEn: string[]
+  creedLines: string[]
+  creedLinesEn: string[]
+  creedHighlight: string[]
+  creedHighlightEn: string[]
   bioShort: string
   bioShortEn: string
   bioLong: string[]
@@ -57,6 +61,10 @@ export const profile: Profile = {
   leadEn: 'I turn ideas into working products, fast — together with AI agents.',
   roles: ['풀스택 개발자', 'AI 엔지니어', '에이전틱 엔지니어', '경북SW마이스터고 학생'],
   rolesEn: ['Full-stack Developer', 'AI Engineer', 'Agentic Engineer', 'SW Meister H.S. Student'],
+  creedLines: ['변화를 따라가는 게 아니라,', '변화와 함께 성장하는 개발자'],
+  creedLinesEn: ["I don't just keep up with change —", 'I grow with it.'],
+  creedHighlight: ['변화', '성장'],
+  creedHighlightEn: ['change', 'grow'],
   bioShort:
     '바이브코딩을 넘어 AI 에이전트를 오케스트레이션하는 에이전틱 엔지니어예요. 익숙하지 않은 언어·스택도 명확한 스펙과 컨텍스트로 빠르게 완성합니다.',
   bioShortEn:

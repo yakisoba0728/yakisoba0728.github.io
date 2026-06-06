@@ -6,6 +6,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ScrollProgress from '@/components/ScrollProgress'
 import Particles from '@/components/Particles'
+import CursorGlow from '@/components/CursorGlow'
 import BackToTop from '@/components/BackToTop'
 import { profile } from '@/content/profile'
 
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-bg text-fg font-sans antialiased" suppressHydrationWarning>
         <ScrollProgress />
         <div className="glow-bg" aria-hidden />
+        <CursorGlow />
         <Particles />
         <Nav />
         <main className="relative z-[1] mx-auto max-w-[1080px] px-6">{children}</main>

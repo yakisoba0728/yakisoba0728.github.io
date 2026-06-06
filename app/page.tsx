@@ -2,6 +2,7 @@ import Hero from '@/components/home/Hero'
 import Marquee from '@/components/Marquee'
 import Counters from '@/components/Counters'
 import Bento from '@/components/home/Bento'
+import Creed from '@/components/home/Creed'
 import ContactCTA from '@/components/home/ContactCTA'
 import Parallax from '@/components/Parallax'
 import T from '@/components/T'
@@ -16,6 +17,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Marquee />
+      <Creed />
       <Parallax speed={0.05} className="block py-8">
         <Counters
           items={[

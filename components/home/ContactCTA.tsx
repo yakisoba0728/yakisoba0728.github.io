@@ -1,5 +1,6 @@
 import { Mail } from 'lucide-react'
 import Reveal from '@/components/Reveal'
+import Magnetic from '@/components/Magnetic'
 import T from '@/components/T'
 import { GithubIcon, InstagramIcon } from '@/components/icons'
 import { profile } from '@/content/profile'
@@ -13,12 +14,18 @@ export default function ContactCTA() {
           <p className="mt-3 text-muted"><T ko="새로운 기회와 협업에 열려 있습니다." en="Open to new opportunities and collaboration." /></p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             {profile.socials.email && (
-              <a href={`mailto:${profile.socials.email}`} className="btn-grad"><Mail size={16} /> <T ko="이메일 보내기" en="Email me" /></a>
+              <Magnetic>
+                <a href={`mailto:${profile.socials.email}`} className="btn-grad"><Mail size={16} /> <T ko="이메일 보내기" en="Email me" /></a>
+              </Magnetic>
             )}
             {profile.socials.instagram && (
-              <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="btn-glass"><InstagramIcon size={16} /> Instagram</a>
+              <Magnetic>
+                <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="btn-glass"><InstagramIcon size={16} /> Instagram</a>
+              </Magnetic>
             )}
-            <a href={profile.socials.github} target="_blank" rel="noreferrer" className="btn-glass"><GithubIcon size={16} /> GitHub</a>
+            <Magnetic>
+              <a href={profile.socials.github} target="_blank" rel="noreferrer" className="btn-glass"><GithubIcon size={16} /> GitHub</a>
+            </Magnetic>
           </div>
         </div>
       </Reveal>
