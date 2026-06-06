@@ -51,8 +51,8 @@ export default function Counters({ items }: { items: CounterItem[] }) {
   return (
     <div className="counters" ref={ref}>
       {items.map((it, i) => (
-        <div className="glass counter" key={i}>
-          <div className="counter-num gradient-text">
+        <div className="counter" key={i}>
+          <div className="counter-num">
             <CountUp to={it.value} run={run} />
             {it.suffix}
           </div>

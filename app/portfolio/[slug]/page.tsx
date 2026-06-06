@@ -28,14 +28,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const { frontmatter, content } = project
 
   return (
-    <article className="py-16">
-      <Link href="/portfolio" className="font-display text-sm text-muted hover:text-fg"><T ko="← 포트폴리오" en="← Portfolio" /></Link>
+    <article className="mx-auto max-w-[820px] py-14 md:py-20">
+      <Link href="/portfolio" className="text-[14px] text-muted transition-colors hover:text-fg"><T ko="← 포트폴리오" en="← Portfolio" /></Link>
 
       <ViewTransition name={`project-${slug}`} share="morph">
-        <div className="mt-4 flex h-44 items-end overflow-hidden rounded-2xl border border-border p-7" style={{ background: 'linear-gradient(120deg, rgba(124,58,237,.22), rgba(34,211,238,.14))' }}>
+        <div className="mt-5 flex h-40 items-end overflow-hidden rounded-xl border border-border p-6" style={{ background: 'var(--color-surface)' }}>
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{frontmatter.title}</h1>
-            <p className="mt-2 font-display text-sm text-muted">{frontmatter.period} · {frontmatter.role}</p>
+            <h1 className="t-display-md">{frontmatter.title}</h1>
+            <p className="mt-2 text-[14px] text-muted" style={{ fontFamily: 'var(--font-mono)' }}>{frontmatter.period} · {frontmatter.role}</p>
           </div>
         </div>
       </ViewTransition>
@@ -47,12 +47,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       </div>
       <div className="mt-4 flex gap-4">
         {frontmatter.repo && (
-          <a href={frontmatter.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-accent-2 hover:underline">
+          <a href={frontmatter.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[14px] font-medium text-accent hover:underline">
             <GithubIcon size={15} /> <T ko="저장소" en="Repository" />
           </a>
         )}
         {frontmatter.demo && (
-          <a href={frontmatter.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-accent-2 hover:underline">
+          <a href={frontmatter.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[14px] font-medium text-accent hover:underline">
             <ExternalLink size={15} /> <T ko="데모" en="Demo" />
           </a>
         )}

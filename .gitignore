@@ -39,6 +39,9 @@ yarn-error.log*
 # superpowers (brainstorm visual companion scratch)
 /.superpowers/
 
+# playwright-mcp (preview/diagnostic artifacts)
+/.playwright-mcp/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -9,18 +9,16 @@ export const metadata: Metadata = { title: '자기소개', description: profile.
 
 export default function AboutPage() {
   return (
-    <div className="py-16">
-      <section className="py-10">
-        <Reveal>
-          <p className="section-label">{'// ABOUT'}</p>
-          <h1 className="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">
-            <T ko={<>안녕하세요,<br /><span className="gradient-text">{profile.name}</span>입니다.</>} en={<>Hi, I&apos;m <span className="gradient-text">{profile.nameEn}</span>.</>} />
-          </h1>
-          {profile.bioLong.map((para, i) => (
-            <p key={i} className="mt-6 max-w-2xl text-lg leading-relaxed text-muted"><T ko={para} en={profile.bioLongEn[i]} /></p>
-          ))}
-        </Reveal>
-      </section>
+    <div className="py-14 md:py-20">
+      <Reveal>
+        <p className="section-label">About</p>
+        <h1 className="t-display mt-4">
+          <T ko={<>안녕하세요,<br /><span className="gradient-text">김동혁</span>입니다.</>} en={<>Hi, I&apos;m <span className="gradient-text">Donghyeok Kim</span>.</>} />
+        </h1>
+        {profile.bioLong.map((para, i) => (
+          <p key={i} className="mt-6 max-w-2xl text-[16px] leading-relaxed text-body"><T ko={para} en={profile.bioLongEn[i]} /></p>
+        ))}
+      </Reveal>
       <Skills />
       <Timeline />
     </div>

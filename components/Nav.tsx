@@ -25,15 +25,13 @@ export default function Nav() {
   return (
     <header
       style={{ viewTransitionName: 'site-header' }}
-      className="sticky top-0 z-50 border-b border-border bg-bg/55 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-md"
     >
-      <nav className="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2.5 font-display text-[17px] font-bold tracking-tight">
+      <nav className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6">
+        <Link href="/" className="flex items-center gap-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/avatar.png" alt="" width={28} height={28} className="h-7 w-7 rounded-full object-cover ring-1 ring-white/15" />
-          <span className="glitch" data-text={profile.name}>
-            <T ko={profile.name} en={profile.nameEn} />
-          </span>
+          <img src="/avatar.png" alt="" width={28} height={28} className="h-7 w-7 rounded-full object-cover" />
+          <span className="text-[15px] font-bold tracking-tight text-fg"><T ko={profile.name} en={profile.nameEn} /></span>
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
@@ -41,7 +39,7 @@ export default function Nav() {
             <Link
               key={l.href}
               href={l.href}
-              className={`rounded-lg px-3 py-2 text-sm transition-colors hover:bg-white/5 hover:text-fg ${
+              className={`rounded-md px-3 py-2 text-[14px] font-medium transition-colors hover:text-fg ${
                 isActive(l.href) ? 'text-fg' : 'text-muted'
               }`}
             >
@@ -51,17 +49,17 @@ export default function Nav() {
           <span className="mx-2 h-4 w-px bg-border" />
           <LangToggle />
           <span className="mx-1 h-4 w-px bg-border" />
-          <a href={profile.socials.github} target="_blank" rel="noreferrer" className="px-1 text-muted hover:text-accent-2" aria-label="GitHub">
+          <a href={profile.socials.github} target="_blank" rel="noreferrer" className="px-1 text-muted transition-colors hover:text-fg" aria-label="GitHub">
             <GithubIcon size={18} />
           </a>
           {profile.socials.instagram && (
-            <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="px-1 text-muted hover:text-accent-2" aria-label="Instagram">
+            <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="px-1 text-muted transition-colors hover:text-fg" aria-label="Instagram">
               <InstagramIcon size={18} />
             </a>
           )}
           {profile.socials.email && (
-            <a href={`mailto:${profile.socials.email}`} className="px-1 text-muted hover:text-accent-2" aria-label="Email">
-              <Mail size={18} />
+            <a href={`mailto:${profile.socials.email}`} className="btn-grad ml-2 !h-9 !px-4 !py-0 text-[13px]">
+              <T ko="연락하기" en="Get in touch" />
             </a>
           )}
         </div>
@@ -72,8 +70,8 @@ export default function Nav() {
       </nav>
 
       {open && (
-        <div className="border-t border-border md:hidden">
-          <div className="mx-auto flex max-w-[1080px] flex-col gap-1 px-6 py-3">
+        <div className="border-t border-border bg-bg md:hidden">
+          <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-6 py-3">
             {links.map((l) => (
               <Link
                 key={l.href}
@@ -87,16 +85,16 @@ export default function Nav() {
             <div className="mt-2 flex items-center gap-4">
               <LangToggle />
               <span className="h-4 w-px bg-border" />
-              <a href={profile.socials.github} target="_blank" rel="noreferrer" className="text-muted hover:text-accent-2" aria-label="GitHub">
+              <a href={profile.socials.github} target="_blank" rel="noreferrer" className="text-muted hover:text-fg" aria-label="GitHub">
                 <GithubIcon size={18} />
               </a>
               {profile.socials.instagram && (
-                <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="text-muted hover:text-accent-2" aria-label="Instagram">
+                <a href={profile.socials.instagram} target="_blank" rel="noreferrer" className="text-muted hover:text-fg" aria-label="Instagram">
                   <InstagramIcon size={18} />
                 </a>
               )}
               {profile.socials.email && (
-                <a href={`mailto:${profile.socials.email}`} className="text-muted hover:text-accent-2" aria-label="Email">
+                <a href={`mailto:${profile.socials.email}`} className="text-muted hover:text-fg" aria-label="Email">
                   <Mail size={18} />
                 </a>
               )}

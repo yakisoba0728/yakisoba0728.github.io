@@ -9,15 +9,15 @@ export const metadata: Metadata = { title: '포트폴리오', description: '프�
 export default function PortfolioPage() {
   const projects = getAllProjects()
   return (
-    <div className="py-16">
-      <Reveal variant="left">
-        <p className="section-label">{'// PORTFOLIO'}</p>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight"><T ko={<>만든 <span className="gradient-text">것들</span></>} en={<>Things I&apos;ve <span className="gradient-text">built</span></>} /></h1>
+    <div className="py-14 md:py-20">
+      <Reveal>
+        <p className="section-label">Portfolio</p>
+        <h1 className="t-display mt-4"><T ko={<>만든 <span className="gradient-text">것들</span></>} en={<>Things I&apos;ve <span className="gradient-text">built</span></>} /></h1>
       </Reveal>
       {projects.length === 0 ? (
-        <p className="mt-8 text-muted"><T ko="아직 등록된 프로젝트가 없습니다." en="No projects yet." /></p>
+        <p className="mt-8 text-body"><T ko="아직 등록된 프로젝트가 없습니다." en="No projects yet." /></p>
       ) : (
-        <Reveal stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal stagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <ProjectCard key={p.slug} project={p} />
           ))}
