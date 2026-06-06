@@ -1,74 +1,58 @@
 import Link from 'next/link'
 import Reveal from '@/components/Reveal'
 import T from '@/components/T'
-import Magnetic from '@/components/Magnetic'
-import KineticText from '@/components/KineticText'
 import { profile } from '@/content/profile'
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-start gap-10 py-16 sm:py-20 md:flex-row md:items-center md:justify-between md:gap-12">
-      <div className="flex flex-col">
+    <section className="grid items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-24">
+      {/* 좌: 헤드라인 + CTA */}
+      <div>
         <Reveal>
-          <span className="status-badge">
-            <span className="status-dot" />
-            <T ko="지금 협업 가능" en="Available for work" />
-          </span>
+          <span className="badge-yellow">AI · Agentic Engineer</span>
         </Reveal>
         <Reveal>
-          <h1 className="mt-6 font-display text-[clamp(2.4rem,9vw,4.6rem)] font-extrabold leading-[1.02] tracking-tight">
-            <T ko={profile.name} en={profile.nameEn} />
-          </h1>
+          <h1 className="t-hero mt-6"><T ko={profile.name} en={profile.nameEn} /></h1>
         </Reveal>
-
-        {/* 서브 헤드라인 = 신념 (단어별 키네틱 등장) */}
-        <KineticText
-          as="h2"
-          className="mt-5 text-[clamp(1.55rem,5.5vw,3rem)] font-bold leading-[1.16] tracking-tight"
-          lines={profile.creedLines}
-          linesEn={profile.creedLinesEn}
-          highlight={profile.creedHighlight}
-          highlightEn={profile.creedHighlightEn}
-        />
-
-        {/* 역할 = 칩 나열 */}
         <Reveal>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {profile.roles.map((role, i) => (
-              <span className="role-chip" key={i}>
-                <T ko={role} en={profile.rolesEn[i]} />
-              </span>
-            ))}
-          </div>
+          <p className="t-display-md mt-5">
+            <T ko={profile.creedLines.join(' ')} en={profile.creedLinesEn.join(' ')} />
+          </p>
         </Reveal>
-
-        {/* 기존 정체성(에이전틱 엔지니어)은 보조 리드로 유지 */}
         <Reveal>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted"><T ko={profile.tagline} en={profile.taglineEn} /></p>
+          <p className="mt-5 max-w-lg text-[16px] leading-relaxed text-body"><T ko={profile.tagline} en={profile.taglineEn} /></p>
         </Reveal>
-
         <Reveal>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Magnetic>
-              <Link href="/portfolio" className="btn-grad"><T ko="프로젝트 보기 →" en="View projects →" /></Link>
-            </Magnetic>
-            <Magnetic>
-              <Link href="/about" className="btn-glass"><T ko="자기소개" en="About me" /></Link>
-            </Magnetic>
+            <Link href="/portfolio" className="btn-grad"><T ko="프로젝트 보기" en="View work" /></Link>
+            <Link href="/about" className="btn-glass"><T ko="자기소개" en="About me" /></Link>
           </div>
         </Reveal>
       </div>
 
-      {/* 프로필 아바타 — 신념 옆 */}
-      <Reveal className="mx-auto shrink-0 md:mx-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/avatar.png"
-          alt={profile.name}
-          width={240}
-          height={240}
-          className="h-48 w-48 rounded-full object-cover ring-2 ring-accent/55 shadow-[0_0_54px_rgba(124,58,237,0.45)] md:h-60 md:w-60"
-        />
+      {/* 우: 코드 윈도우 */}
+      <Reveal className="rv-right">
+        <div className="code-window">
+          <div className="code-window-bar">
+            <span className="code-dot" style={{ background: '#ef4444' }} />
+            <span className="code-dot" style={{ background: '#f59e0b' }} />
+            <span className="code-dot" style={{ background: '#22c55e' }} />
+            <span className="ml-2 text-[12px] text-muted" style={{ fontFamily: 'var(--font-mono)' }}>agent.py</span>
+          </div>
+          <div className="code-body">
+            <div><span className="c-com"># 멀티 에이전트로 아이디어를 제품으로</span></div>
+            <div><span className="c-kw">from</span> agents <span className="c-kw">import</span> Orchestrator, Agent</div>
+            <div className="h-4" />
+            <div>orchestrator = <span className="c-fn">Orchestrator</span>(model=<span className="c-str">&quot;claude&quot;</span>)</div>
+            <div>orchestrator.<span className="c-fn">add</span>(<span className="c-fn">Agent</span>(<span className="c-str">&quot;planner&quot;</span>))</div>
+            <div>orchestrator.<span className="c-fn">add</span>(<span className="c-fn">Agent</span>(<span className="c-str">&quot;builder&quot;</span>))</div>
+            <div className="h-4" />
+            <div>result = orchestrator.<span className="c-fn">run</span>(</div>
+            <div>{'  '}spec=<span className="c-str">&quot;변화와 함께 성장하기&quot;</span>,</div>
+            <div>)</div>
+            <div><span className="c-fn">print</span>(result.status){'  '}<span className="c-com"># shipped ✨</span></div>
+          </div>
+        </div>
       </Reveal>
     </section>
   )

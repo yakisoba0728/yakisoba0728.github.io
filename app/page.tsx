@@ -3,7 +3,6 @@ import Marquee from '@/components/Marquee'
 import Counters from '@/components/Counters'
 import Bento from '@/components/home/Bento'
 import ContactCTA from '@/components/home/ContactCTA'
-import Parallax from '@/components/Parallax'
 import T from '@/components/T'
 import { profile } from '@/content/profile'
 import { getAllProjects } from '@/lib/content'
@@ -16,7 +15,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Marquee />
-      <Parallax speed={0.05} className="block py-8">
+      <section className="py-12 md:py-16">
         <Counters
           items={[
             { label: <T ko="다루는 기술 · 도구" en="Tools & tech" />, value: skillCount, suffix: '+' },
@@ -24,7 +23,7 @@ export default function HomePage() {
             { label: <T ko="만든 프로젝트" en="Projects shipped" />, value: projectCount },
           ]}
         />
-      </Parallax>
+      </section>
       <Bento />
       <ContactCTA />
     </>

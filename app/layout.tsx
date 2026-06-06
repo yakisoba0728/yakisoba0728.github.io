@@ -1,21 +1,15 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ScrollProgress from '@/components/ScrollProgress'
-import Particles from '@/components/Particles'
-import CursorGlow from '@/components/CursorGlow'
 import BackToTop from '@/components/BackToTop'
 import { profile } from '@/content/profile'
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk',
-  display: 'swap',
-})
-
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const jetbrains = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains', display: 'swap' })
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
   variable: '--font-pretendard',
@@ -36,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={`${pretendard.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+    <html lang="ko" className={`${inter.variable} ${jetbrains.variable} ${pretendard.variable}`} suppressHydrationWarning>
       <head>
         <script
           suppressHydrationWarning
@@ -45,13 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="bg-bg text-fg font-sans antialiased" suppressHydrationWarning>
+      <body className="bg-bg text-body font-sans antialiased" suppressHydrationWarning>
         <ScrollProgress />
-        <div className="glow-bg" aria-hidden />
-        <CursorGlow />
-        <Particles />
+        <div className="pink-glow" aria-hidden />
+        <div className="grain" aria-hidden />
         <Nav />
-        <main className="relative z-[1] mx-auto max-w-[1080px] px-6">{children}</main>
+        <main className="relative mx-auto max-w-[1280px] px-6">{children}</main>
         <Footer />
         <BackToTop />
       </body>
