@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Reveal from '@/components/Reveal'
+import Tilt from '@/components/Tilt'
 import ProjectCard from '@/components/ProjectCard'
 import T from '@/components/T'
 import { profile } from '@/content/profile'
@@ -14,16 +15,16 @@ export default function Bento() {
       </Reveal>
       <Reveal stagger className="bento mt-6">
         {/* About */}
-        <div className="glass card-hover bento-card col-4">
+        <Tilt className="glass bento-card col-4">
           <p className="section-label">{'// ABOUT'}</p>
           <p className="mt-4 text-lg leading-relaxed text-fg/90"><T ko={profile.bioShort} en={profile.bioShortEn} /></p>
           <Link href="/about" className="mt-4 inline-block text-sm text-accent-2 hover:underline">
             <T ko="자기소개 더 보기 →" en="More about me →" />
           </Link>
-        </div>
+        </Tilt>
 
         {/* Now */}
-        <div className="glass card-hover bento-card col-2">
+        <Tilt className="glass bento-card col-2">
           <p className="section-label">{'// NOW'}</p>
           <ul className="mt-4 flex flex-col gap-3">
             {profile.now.map((item, i) => (
@@ -33,10 +34,10 @@ export default function Bento() {
               </li>
             ))}
           </ul>
-        </div>
+        </Tilt>
 
         {/* Skills */}
-        <div className="glass card-hover bento-card col-3">
+        <Tilt className="glass bento-card col-3">
           <p className="section-label">{'// SKILLS'}</p>
           <div className="mt-4 flex flex-col gap-4">
             {profile.skills.map((group) => (
@@ -50,10 +51,10 @@ export default function Bento() {
               </div>
             ))}
           </div>
-        </div>
+        </Tilt>
 
         {/* Activities */}
-        <div className="glass card-hover bento-card col-3">
+        <Tilt className="glass bento-card col-3">
           <p className="section-label">{'// ACTIVITIES'}</p>
           <ul className="mt-4 flex flex-col gap-3">
             {profile.activities.map((a, i) => (
@@ -68,7 +69,7 @@ export default function Bento() {
               </li>
             ))}
           </ul>
-        </div>
+        </Tilt>
 
         {/* Featured projects */}
         {projects.map((p) => (

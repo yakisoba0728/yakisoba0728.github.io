@@ -103,7 +103,7 @@ body { background-color: var(--color-bg); color: var(--color-fg); overflow-x: hi
 @keyframes floatUp { 0% { opacity: 0; transform: translateY(0) scale(0); } 12% { opacity: .45; } 88% { opacity: .45; } 100% { opacity: 0; transform: translateY(-112vh) scale(1); } }
 
 /* ---- tech marquee ---- */
-.marquee { overflow: hidden; white-space: nowrap; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 14px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.marquee { width: 100vw; position: relative; left: 50%; margin-left: -50vw; overflow: hidden; white-space: nowrap; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 14px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
 .marquee-track { display: inline-flex; align-items: center; gap: 2.5rem; padding-left: 2.5rem; animation: marquee 32s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-item { font-family: var(--font-display); font-size: 14px; letter-spacing: .02em; color: var(--color-muted); display: inline-flex; align-items: center; gap: 2.5rem; }
@@ -149,16 +149,68 @@ body { background-color: var(--color-bg); color: var(--color-fg); overflow-x: hi
 .t-en { display: none; }
 html[data-lang="en"] .t-en { display: inline; }
 html[data-lang="en"] .t-ko { display: none; }
+/* 키네틱 텍스트는 줄(block) 단위라 block으로 토글 */
+.kinetic .t-ko, .kinetic .t-en { display: block; }
+.kinetic .t-en { display: none; }
+html[data-lang="en"] .kinetic .t-en { display: block; }
+html[data-lang="en"] .kinetic .t-ko { display: none; }
 
 /* language toggle */
 .lang-toggle { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--color-border); background: var(--color-surface); border-radius: 999px; cursor: pointer; }
 .lang-toggle span { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--color-muted); padding: 4px 9px; border-radius: 999px; transition: color .2s, background .2s; }
 .lang-toggle span.on { color: #0a0a12; background: var(--grad); }
 
+/* ---- 키네틱 타이포 (줄별 슬라이드업) ---- */
+.kinetic { display: block; }
+.kinetic-line { display: block; overflow: hidden; padding-bottom: 0.08em; }
+.kinetic-word { display: inline-block; transform: translateY(120%); transition: transform .82s var(--ease); transition-delay: calc(var(--i, 0) * 55ms); will-change: transform; }
+.kinetic.in .kinetic-word { transform: translateY(0); }
+.kinetic-hl { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ---- 커서 추적 글로우 (전역 고정 레이어 — 컨테이너에 잘리지 않음) ---- */
+.cursor-glow-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease); background: radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%), rgba(167,139,250,.13), rgba(34,211,238,.05) 42%, transparent 72%); }
+
+/* ---- 3D 틸트 카드 ---- */
+.tilt-card { position: relative; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transform-style: preserve-3d; transition: transform .3s var(--ease), border-color .3s, box-shadow .3s; will-change: transform; }
+.tilt-card:hover { border-color: rgba(167,139,250,.45); box-shadow: 0 22px 50px rgba(0,0,0,.45); }
+.tilt-sheen { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.07), transparent 55%); }
+.tilt-card:hover .tilt-sheen { opacity: 1; }
+
+/* ---- 마그네틱 래퍼 ---- */
+.magnetic { display: inline-flex; transition: transform .35s var(--ease); will-change: transform; }
+
+/* ---- floating ---- */
+.float { animation: floaty 6.5s ease-in-out infinite; }
+@keyframes floaty { 50% { transform: translateY(-9px); } }
+
+/* ---- 신념(Creed) 섹션 ---- */
+.creed { position: relative; padding: clamp(5rem, 14vh, 9rem) 0; }
+.creed::before { content: "\201C"; position: absolute; top: -0.15em; left: -0.06em; font-family: var(--font-display); font-size: clamp(5rem, 16vw, 12rem); line-height: 1; color: var(--color-accent); opacity: .1; pointer-events: none; z-index: 0; }
+.creed > * { position: relative; z-index: 1; }
+.creed-text { font-size: clamp(1.85rem, 6vw, 4rem); font-weight: 800; line-height: 1.14; letter-spacing: -0.02em; }
+.creed-sign { margin-top: clamp(1.5rem, 4vh, 2.5rem); font-family: var(--font-display); font-size: 14px; letter-spacing: .04em; color: var(--color-muted); }
+.creed-sign b { color: var(--color-fg); font-weight: 600; }
+
+/* ---- 라이브 상태 배지 ---- */
+.status-badge { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 500; letter-spacing: .01em; color: var(--color-fg); padding: 8px 16px 8px 14px; border-radius: 999px; background: linear-gradient(rgba(34,211,238,.07), rgba(34,211,238,.03)); border: 1px solid rgba(34,211,238,.28); box-shadow: 0 6px 22px -10px rgba(34,211,238,.5); }
+.status-dot { position: relative; width: 8px; height: 8px; flex: none; }
+.status-dot::before, .status-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--color-accent-2); }
+.status-dot::after { animation: ping 1.9s cubic-bezier(0,0,.2,1) infinite; }
+@keyframes ping { 70%, 100% { transform: scale(2.6); opacity: 0; } }
+
+/* ---- 역할 칩 ---- */
+.role-chip { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-display); font-size: 13px; font-weight: 500; color: var(--color-fg); padding: 7px 14px; border-radius: 10px; background: var(--color-surface); border: 1px solid var(--color-border); transition: border-color .25s var(--ease), transform .25s var(--ease), background .25s; }
+.role-chip::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--grad); flex: none; }
+.role-chip:hover { border-color: rgba(167,139,250,.5); transform: translateY(-2px); background: rgba(167,139,250,.06); }
+
 /* ---- 모션 민감성 존중 ---- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0s !important; transition-duration: 0.001ms !important; }
   .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
+  .kinetic-word { transform: none !important; }
+  .tilt-card, .magnetic { transform: none !important; }
+  .cursor-glow-layer, .tilt-sheen { display: none !important; }
+  .float { animation: none !important; }
   ::view-transition-old(*), ::view-transition-new(*), ::view-transition-group(*) { animation-duration: 0s !important; animation-delay: 0s !important; }
   .marquee-track { animation: none !important; }
 }
