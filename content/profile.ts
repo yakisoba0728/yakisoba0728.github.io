@@ -83,10 +83,10 @@ export const profile: Profile = {
     email: 'yakisoba0728@yaki.kr',
   },
   skills: [
-    { category: 'Languages', items: ['Python', 'Node.js', 'Java'] },
-    { category: 'AI / ML', items: ['PyTorch', 'Hugging Face', 'vLLM', 'Ollama'] },
-    { category: 'Web', items: ['Next.js', 'React', 'Tailwind CSS'] },
-    { category: 'Infra / Tools', items: ['Docker', 'AWS', 'Vercel', 'Git'] },
+    { category: 'Languages', items: ['Python', 'TypeScript', 'Node.js', 'Java'] },
+    { category: 'AI / ML', items: ['PyTorch', 'Hugging Face', 'LangChain', 'Claude API', 'vLLM', 'Ollama'] },
+    { category: 'Web', items: ['Next.js', 'React', 'FastAPI', 'Tailwind CSS'] },
+    { category: 'Infra / Tools', items: ['PostgreSQL', 'pgvector', 'Docker', 'AWS', 'Vercel', 'Git'] },
   ],
   now: [
     '멀티 에이전트 오케스트레이션 프레임워크를 만드는 중',
