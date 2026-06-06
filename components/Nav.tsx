@@ -29,7 +29,8 @@ export default function Nav() {
     >
       <nav className="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5 font-display text-[17px] font-bold tracking-tight">
-          <span className="h-[11px] w-[11px] rounded-[3px]" style={{ background: 'var(--grad)', boxShadow: '0 0 12px rgba(124,58,237,.7)' }} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/avatar.png" alt="" width={28} height={28} className="h-7 w-7 rounded-full object-cover ring-1 ring-white/15" />
           <span className="glitch" data-text={profile.name}>
             <T ko={profile.name} en={profile.nameEn} />
           </span>
