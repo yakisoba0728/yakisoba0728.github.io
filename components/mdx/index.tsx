@@ -9,13 +9,13 @@ const prettyCodeOptions: PrettyCodeOptions = {
 
 const components = {
   a: (props: React.ComponentPropsWithoutRef<'a'>) => (
-    <a className="text-accent-2 underline underline-offset-2 hover:text-accent" {...props} />
+    <a className="text-accent underline underline-offset-2" {...props} />
   ),
 }
 
 export function Mdx({ source }: { source: string }) {
   return (
-    <div className="prose prose-invert max-w-none prose-headings:scroll-mt-24 prose-pre:border prose-pre:border-border prose-pre:bg-surface">
+    <div className="prose-ch max-w-none">
       <MDXRemote
         source={source}
         components={components}

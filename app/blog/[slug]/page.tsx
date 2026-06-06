@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getAllPosts, getPost } from '@/lib/content'
 import { formatDate } from '@/lib/format'
 import { Mdx } from '@/components/mdx'
+import T from '@/components/T'
 
 export const dynamicParams = false
 
@@ -11,39 +12,27 @@ export function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }))
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const post = getPost(slug)
   if (!post) return {}
   return { title: post.frontmatter.title, description: post.frontmatter.summary }
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const post = getPost(slug)
   if (!post) notFound()
   const { frontmatter, content } = post
 
   return (
-    <article className="py-16">
-      <Link href="/blog" className="font-mono text-sm text-muted hover:text-fg">
-        ← blog
-      </Link>
-      <h1 className="mt-4 text-3xl font-bold sm:text-4xl">{frontmatter.title}</h1>
-      <p className="mt-2 font-mono text-sm text-muted">{formatDate(frontmatter.date)}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
+    <article className="mx-auto max-w-[760px] py-14 md:py-20">
+      <Link href="/blog" className="text-[14px] text-muted transition-colors hover:text-fg"><T ko="← 블로그" en="← Blog" /></Link>
+      <h1 className="t-display mt-5">{frontmatter.title}</h1>
+      <p className="mt-3 text-[14px] text-muted" style={{ fontFamily: 'var(--font-mono)' }}>{formatDate(frontmatter.date)}</p>
+      <div className="mt-3 flex flex-wrap gap-1.5">
         {frontmatter.tags.map((t) => (
-          <span key={t} className="font-mono text-xs text-accent-2">
-            #{t}
-          </span>
+          <span key={t} className="chip text-[11px]">#{t}</span>
         ))}
       </div>
       <hr className="my-8 border-border" />
