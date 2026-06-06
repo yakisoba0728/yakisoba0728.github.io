@@ -103,6 +103,16 @@ body {
 .pill-dot, .status-dot { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); flex: none; }
 .badge-yellow { display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-on-yellow); background: var(--color-accent); padding: 4px 12px; border-radius: 9999px; }
 
+/* ---- kaomoji mascot (replaces the AI eyebrow badge) ---- */
+.kao { display: inline-grid; font-size: 26px; line-height: 1; color: var(--color-accent); font-weight: 600; letter-spacing: .04em; transform-origin: 50% 85%; animation: kao-bob 3s ease-in-out infinite; }
+.kao > span { grid-area: 1 / 1; }
+.kao .kao-open { animation: kao-blink-open 3.8s ease-in-out infinite; }
+.kao .kao-shut { animation: kao-blink-shut 3.8s ease-in-out infinite; }
+@keyframes kao-blink-open { 0%,89%{opacity:1} 91%,95%{opacity:0} 97%,100%{opacity:1} }
+@keyframes kao-blink-shut { 0%,89%{opacity:0} 91%,95%{opacity:1} 97%,100%{opacity:0} }
+@keyframes kao-bob { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-6px) rotate(5deg)} }
+@media (prefers-reduced-motion: reduce) { .kao, .kao .kao-open, .kao .kao-shut { animation: none; } .kao .kao-shut { opacity: 0; } }
+
 /* ---- scroll reveal (the one motion kept, restrained) ---- */
 .reveal { opacity: 0; transform: translateY(var(--rise)); transition: opacity var(--reveal-dur) var(--ease), transform var(--reveal-dur) var(--ease); }
 .reveal.rv-left { transform: translateX(calc(-1 * var(--rise))); }
