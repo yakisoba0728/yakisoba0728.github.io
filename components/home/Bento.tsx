@@ -1,14 +1,13 @@
 import Link from 'next/link'
 import Reveal from '@/components/Reveal'
-import ProjectCard from '@/components/ProjectCard'
 import T from '@/components/T'
+import EmptyState from '@/components/EmptyState'
 import { profile } from '@/content/profile'
-import { getFeaturedProjects } from '@/lib/content'
 
 const cardLabel = 'text-[12px] font-semibold uppercase tracking-[0.1em] text-muted'
 
 export default function Bento() {
-  const projects = getFeaturedProjects().slice(0, 3)
+  const emptyLine = <EmptyState className="mt-3 text-[14px]" />
   return (
     <section className="py-12 md:py-16">
       <Reveal><p className="section-label">Overview</p></Reveal>
@@ -23,14 +22,7 @@ export default function Bento() {
         {/* Now */}
         <div className="glass card-hover bento-card col-2">
           <p className={cardLabel}>Now</p>
-          <ul className="mt-3 flex flex-col gap-3">
-            {profile.now.map((item, i) => (
-              <li key={i} className="flex gap-2.5 text-[14px] leading-relaxed text-body">
-                <span className="pill-dot mt-1.5 shrink-0" />
-                <T ko={item} en={profile.nowEn[i]} />
-              </li>
-            ))}
-          </ul>
+          {emptyLine}
         </div>
 
         {/* Skills */}
@@ -51,24 +43,14 @@ export default function Bento() {
         {/* Activities */}
         <div className="glass card-hover bento-card col-3">
           <p className={cardLabel}>Activities</p>
-          <ul className="mt-3 flex flex-col gap-3">
-            {profile.activities.map((a, i) => (
-              <li key={i}>
-                <p className="text-[14px] text-fg"><T ko={a.title} en={profile.activitiesEn[i].title} /></p>
-                <p className="text-[12px] text-muted-2">
-                  <T
-                    ko={[a.org, a.period].filter(Boolean).join(' · ')}
-                    en={[profile.activitiesEn[i].org, profile.activitiesEn[i].period].filter(Boolean).join(' · ')}
-                  />
-                </p>
-              </li>
-            ))}
-          </ul>
+          {emptyLine}
         </div>
 
-        {/* Featured projects (3개) + 전체 보기 */}
-        {projects.map((p) => (
-          <ProjectCard key={p.slug} project={p} className="col-2" />
+        {/* Featured projects → 비어 있음 (기존 3개 카드 유지) */}
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="glass col-2 flex min-h-[200px] items-center justify-center">
+            <EmptyState className="px-2 text-center text-[14px]" />
+          </div>
         ))}
       </Reveal>
       <Reveal>
