@@ -9,10 +9,13 @@ export default function Hero() {
       {/* 좌: 헤드라인 + CTA */}
       <div>
         <Reveal>
-          <span className="badge-yellow">AI · Agentic Engineer</span>
+          <span className="kao" aria-hidden="true">
+            <span className="kao-open">꒰ᐢ. .ᐢ꒱</span>
+            <span className="kao-shut">꒰ᐢ- -ᐢ꒱</span>
+          </span>
         </Reveal>
         <Reveal>
-          <h1 className="t-hero mt-6"><T ko={profile.name} en={profile.nameEn} /></h1>
+          <h1 className="t-hero mt-2"><T ko={profile.name} en={profile.nameEn} /></h1>
         </Reveal>
         <Reveal>
           <p className="t-display-md mt-5">
