@@ -264,7 +264,7 @@ Expected: 성공.
 
 검증:
 ```bash
-grep -rq 'lava-molten' out/_next/static/css/ && echo "css present"
+grep -rq 'lava-molten' out/_next/static/chunks/ && echo "css present"
 ```
 Expected: `css present` (Tailwind/Next가 변형 CSS를 번들에 포함).
 
