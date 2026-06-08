@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Reveal from '@/components/Reveal'
 import T from '@/components/T'
 import { profile } from '@/content/profile'
+import CodeWindow from '@/components/CodeWindow'
 
 export default function HeroV2() {
   return (
@@ -35,27 +36,7 @@ export default function HeroV2() {
 
       {/* 우: 코드 윈도우 (glass) */}
       <Reveal className="rv-right">
-        <div className="code-window code-window-glass">
-          <div className="code-window-bar">
-            <span className="code-dot" style={{ background: '#ef4444' }} />
-            <span className="code-dot" style={{ background: '#f59e0b' }} />
-            <span className="code-dot" style={{ background: '#22c55e' }} />
-            <span className="ml-2 text-[12px] text-muted" style={{ fontFamily: 'var(--font-mono)' }}>agent.py</span>
-          </div>
-          <div className="code-body">
-            <div><span className="c-com"># 멀티 에이전트로 아이디어를 제품으로</span></div>
-            <div><span className="c-kw">from</span> agents <span className="c-kw">import</span> Orchestrator, Agent</div>
-            <div className="h-4" />
-            <div>orchestrator = <span className="c-fn">Orchestrator</span>(model=<span className="c-str">&quot;claude&quot;</span>)</div>
-            <div>orchestrator.<span className="c-fn">add</span>(<span className="c-fn">Agent</span>(<span className="c-str">&quot;planner&quot;</span>))</div>
-            <div>orchestrator.<span className="c-fn">add</span>(<span className="c-fn">Agent</span>(<span className="c-str">&quot;builder&quot;</span>))</div>
-            <div className="h-4" />
-            <div>result = orchestrator.<span className="c-fn">run</span>(</div>
-            <div>{'  '}spec=<span className="c-str">&quot;변화와 함께 성장하기&quot;</span>,</div>
-            <div>)</div>
-            <div><span className="c-fn">print</span>(result.status){'  '}<span className="c-com"># shipped ✨</span></div>
-          </div>
-        </div>
+        <CodeWindow />
       </Reveal>
     </section>
   )

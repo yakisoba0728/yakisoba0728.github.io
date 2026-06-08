@@ -30,7 +30,7 @@ export default function Nav() {
       <nav className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/avatar.png" alt="" width={28} height={28} className="h-7 w-7 rounded-full object-cover" />
+          <img src="/avatar.png" alt="" width={28} height={28} className="h-7 w-7 rounded-lg object-cover" />
           <span className="text-[15px] font-bold tracking-tight text-fg"><T ko={profile.name} en={profile.nameEn} /></span>
         </Link>
 

@@ -77,9 +77,10 @@ body {
 .link:hover { text-decoration: underline; }
 
 /* ---- cards ---- */
-.glass, .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; }
+.glass, .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; transition: border-color .2s var(--ease); }
+/* hover 외곽선 통일: 모든 glass/card 카드가 hover 시 외곽선 강조 (포트폴리오·Bento·Timeline 포함) */
+.glass:hover, .card:hover, .card-hover:hover { border-color: var(--color-border-2); }
 .card-hover { transition: border-color .2s var(--ease); }
-.card-hover:hover { border-color: var(--color-border-2); }
 
 /* ---- code window ---- */
 .code-window { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
@@ -232,22 +233,21 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
    (배너 워밍 글로우 .v2-glow는 라이브 피드백으로 제거 — 배경은 원본 .pink-glow 사용)
    =================================================================== */
 
-/* ② 용암 마퀴 — 글자 속을 흐르는 그라데이션 */
-.marquee-lava .marquee-item {
+/* ② 용암 마퀴 — 줄 전체에 이어진 '하나의' 그라데이션이 통째로 흐름.
+   (글자별 개별 애니메이션이 아니라, 트랙 전체 텍스트에 클립된 연속 그라데이션) */
+.marquee-lava .marquee-track {
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  background-image: linear-gradient(90deg, #7c2d12, #f59e0b, #ff7a18, #ec5a4d, #7c2d12);
-  background-size: 300% 100%;
-  animation: lava-molten 4s linear infinite;
-  filter: drop-shadow(0 0 7px rgba(249, 115, 22, 0.40));
+  background-image: repeating-linear-gradient(90deg,
+    #7c2d12 0, #ec5a4d 95px, #ff7a18 185px, #f59e0b 280px, #ec5a4d 375px, #7c2d12 470px);
+  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.30));
 }
-/* 구분자 "/"는 그라데이션 클립에서 빠져나와 muted 색으로 표시 */
-.marquee-lava .marquee-item::after {
-  -webkit-text-fill-color: var(--color-muted-2);
-  background: none;
+/* 항목/구분자 모두 투명 글자로 두어 트랙의 통일 그라데이션이 비치도록 */
+.marquee-lava .marquee-item {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
-@keyframes lava-molten { to { background-position: 300% 0; } }
 
 /* ③ 글래스 코드창 — 반투명 + 블러, 뒤 글로우가 비침 */
 .code-window-glass {
@@ -258,3 +258,68 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 .code-window-glass .code-window-bar { border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
+.code-window-glass { transition: transform .28s var(--ease), box-shadow .28s var(--ease); }
+
+/* 신호등 버튼 (닫기/최소화/최대화) — hover 시 ×/–/+ 글리프 노출 */
+.code-window-glass .code-dot {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.code-window-glass .code-dot::before {
+  opacity: 0;
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.6);
+  transition: opacity .15s;
+}
+.code-window-glass:hover .code-dot::before,
+.code-window-glass .code-dot:focus-visible::before { opacity: 1; }
+.code-window-glass .code-dot--close::before { content: "\00d7"; }
+.code-window-glass .code-dot--min::before { content: "\2013"; }
+.code-window-glass .code-dot--max::before { content: "+"; }
+
+/* 최소화: 본문 접기 / 최대화: 확대 */
+.code-window-glass .code-body {
+  transition: max-height .28s var(--ease), opacity .2s var(--ease), padding .28s var(--ease);
+  max-height: 520px;
+  overflow: hidden;
+}
+.code-window-glass.is-min .code-body {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.code-window-glass.is-max {
+  transform: scale(1.06);
+  transform-origin: top center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  z-index: 5;
+}
+
+/* 닫았을 때 그 자리에 뜨는 '열기' 버튼 */
+.code-window-reopen {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(22, 22, 22, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: var(--color-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .2s var(--ease);
+}
+.code-window-reopen:hover { border-color: rgba(255, 255, 255, 0.22); }
+.code-window-reopen .code-dot { width: 11px; height: 11px; border-radius: 50%; }

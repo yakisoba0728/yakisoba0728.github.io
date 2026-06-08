@@ -1,4 +1,4 @@
-// 원형 마스킹된 투명 PNG 파비콘을 생성한다.
+// 둥근 정사각형(스퀘어클) 마스킹된 투명 PNG 파비콘을 생성한다.
 // 소스: public/avatar.png (확장자와 달리 JPEG, 736x736), 출력: app/icon.png (512x512 RGBA)
 import sharp from 'sharp'
 import path from 'node:path'
@@ -8,9 +8,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const SRC = path.join(__dirname, '..', 'public', 'avatar.png')
 const OUT = path.join(__dirname, '..', 'app', 'icon.png')
 const SIZE = 512
-const r = SIZE / 2
+const RADIUS = Math.round(SIZE * 0.22) // iOS 앱 아이콘 같은 둥근 정사각형 비율
 const mask = Buffer.from(
-  `<svg width="${SIZE}" height="${SIZE}"><circle cx="${r}" cy="${r}" r="${r}" fill="#fff"/></svg>`,
+  `<svg width="${SIZE}" height="${SIZE}"><rect width="${SIZE}" height="${SIZE}" rx="${RADIUS}" ry="${RADIUS}" fill="#fff"/></svg>`,
 )
 
 try {
