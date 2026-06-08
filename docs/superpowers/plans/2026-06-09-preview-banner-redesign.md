@@ -179,9 +179,9 @@ Expected: 빌드 성공, 출력 라우트 목록에 `/preview` 포함, `out/prev
 
 검증:
 ```bash
-test -f out/preview/index.html && echo "preview route OK"
-grep -q 'marquee marquee-lava' out/preview/index.html && echo "lava class wired"
-grep -q 'code-window-glass' out/preview/index.html && echo "glass class wired"
+test -f out/preview.html && echo "preview route OK"
+grep -q 'marquee marquee-lava' out/preview.html && echo "lava class wired"
+grep -q 'code-window-glass' out/preview.html && echo "glass class wired"
 ```
 Expected 출력:
 ```
@@ -264,7 +264,7 @@ Expected: 성공.
 
 검증:
 ```bash
-grep -q 'lava-molten' out/preview/index.html out/_next/static/css/*.css && echo "css present"
+grep -rq 'lava-molten' out/_next/static/css/ && echo "css present"
 ```
 Expected: `css present` (Tailwind/Next가 변형 CSS를 번들에 포함).
 
@@ -440,7 +440,7 @@ Expected: 둘 다 성공(에러 0).
 
 Run:
 ```bash
-test -f out/index.html && test -f out/preview/index.html && echo "both routes exported"
+test -f out/index.html && test -f out/preview.html && echo "both routes exported"
 ```
 Expected: `both routes exported`
 
