@@ -8,6 +8,12 @@
 
 **Tech Stack:** Next.js 16 (`output: export`), React 19, Tailwind CSS v4, `sharp`(파비콘 생성), GitHub Pages 배포.
 
+> **커밋 메모:** 아래 모든 태스크 커밋 메시지는 마지막 줄에 다음 트레일러를 포함해야 한다(하네스 요구):
+> `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>`
+> (예: `git commit -m "<subject>" -m "Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"`)
+
+> **Pre-flight:** 손대기 전에 `npm run build`를 한 번 돌려 기존 상태가 통과하는지 확인한다(사전 실패를 본 변경 탓으로 오인하지 않기 위함).
+
 > **테스트 전략 메모:** 이 저장소의 vitest는 `lib/**/*.test.ts`(순수 로직)만 대상으로 하고 `@/` alias·DOM/컴포넌트 테스트 인프라가 없다. 이 작업은 시각/정적-export 변경이므로, 스펙 §8의 검증 방식을 그대로 채택한다 — 즉 **빌드 산출물 검사 + `git diff` 보존 가드 + lint + `0.0.0.0` dev 육안 확인**을 각 태스크의 "테스트"로 사용한다(불안정한 컴포넌트 SSR 테스트는 만들지 않는다). 각 태스크는 기대 출력이 명시된 verify 단계를 포함한다.
 
 ---
@@ -266,7 +272,8 @@ Expected: `css present` (Tailwind/Next가 변형 CSS를 번들에 포함).
 
 Run: `npx next dev -H 0.0.0.0 -p 3000`
 브라우저에서 `http://<this-host>:3000/preview` 확인:
-- 배너 뒤 위 코랄 글로우 + 아래 주황 불씨가 **히어로 영역에만** 보이고 아래 Bento/ContactCTA로 번지지 않는다.
+- 배너 뒤 위 코랄 글로우 + 아래 주황 불씨가 **히어로 영역에만**(세로) 보이고 아래 Bento/ContactCTA로 번지지 않는다.
+- **와이드 모니터 가로폭 확인**: `.v2-glow`가 `inset:0`이면 `<main>`의 1280px 중앙 컬럼에만 깔려 양옆이 어두울 수 있다. 승인된 목업은 풀폭 워시 느낌이었으니, 좁아 보이면 풀블리드로 바꾼다 — `.v2-glow { left:50%; transform:translateX(-50%); width:100vw; right:auto; }`(top/bottom은 0 유지). 라이브에서 보고 결정.
 - 마퀴 글자에 주황→코랄 그라데이션이 흐른다(움직임).
 - 코드창이 반투명 글래스로 뒤 불빛이 은은히 비친다.
 - `http://<this-host>:3000/` (원본)은 시각적으로 그대로다.
@@ -389,7 +396,7 @@ Run: `npm run build`
 검증:
 ```bash
 test -f out/icon.png && echo "icon.png exported"
-grep -qE 'rel="icon"[^>]*icon\.png' out/index.html && echo "favicon link OK"
+grep -q 'icon\.png' out/index.html && echo "favicon link OK"
 ```
 Expected:
 ```
