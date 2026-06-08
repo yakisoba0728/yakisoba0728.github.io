@@ -27,7 +27,7 @@
 | `app/preview/page.tsx` | `/preview` 홈 조합 | Create |
 | `app/globals.css` | 변형 스코프 CSS 블록 (추가만) | Modify (append) |
 | `components/Nav.tsx` | 연락하기 버튼 `min-width` 고정 (전역) | Modify (1 line) |
-| `scripts/gen-favicon.cjs` | 원형 파비콘 생성 스크립트 | Create |
+| `scripts/gen-favicon.mjs` | 원형 파비콘 생성 스크립트 | Create |
 | `app/icon.png` | 원형 투명 파비콘 (생성물) | Create |
 | `app/icon.jpg` | 정사각 JPEG 파비콘 | Delete |
 | `app/apple-icon.jpg` | iOS 홈화면 아이콘 | **유지(무수정)** |
@@ -341,18 +341,21 @@ git commit -m "fix(nav): stabilize KO/EN toggle by fixing contact button width"
 `public/avatar.png`(실제로는 736×736 JPEG)와 `app/icon.jpg`는 정사각이라 탭에서 네모. sharp로 원형 마스킹 PNG를 만들어 교체한다. `apple-icon.jpg`는 iOS가 자동 마스킹하므로 유지.
 
 **Files:**
-- Create: `scripts/gen-favicon.cjs`
+- Create: `scripts/gen-favicon.mjs`
 - Create: `app/icon.png` (스크립트 산출물)
 - Delete: `app/icon.jpg`
 
-- [ ] **Step 1: `scripts/gen-favicon.cjs` 생성**
+- [ ] **Step 1: `scripts/gen-favicon.mjs` 생성**
 
 ```js
 // 원형 마스킹된 투명 PNG 파비콘을 생성한다.
 // 소스: public/avatar.png (확장자와 달리 JPEG, 736x736), 출력: app/icon.png (512x512 RGBA)
-const sharp = require('sharp')
-const path = require('path')
+// ESM (.mjs) — eslint-config-next forbids require()
+import sharp from 'sharp'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const SRC = path.join(__dirname, '..', 'public', 'avatar.png')
 const OUT = path.join(__dirname, '..', 'app', 'icon.png')
 const SIZE = 512
@@ -361,21 +364,22 @@ const mask = Buffer.from(
   `<svg width="${SIZE}" height="${SIZE}"><circle cx="${r}" cy="${r}" r="${r}" fill="#fff"/></svg>`,
 )
 
-sharp(SRC)
-  .resize(SIZE, SIZE, { fit: 'cover' })
-  .composite([{ input: mask, blend: 'dest-in' }])
-  .png()
-  .toFile(OUT)
-  .then((info) => console.log(`wrote ${OUT} ${info.width}x${info.height} channels=${info.channels}`))
-  .catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
+try {
+  const info = await sharp(SRC)
+    .resize(SIZE, SIZE, { fit: 'cover' })
+    .composite([{ input: mask, blend: 'dest-in' }])
+    .png()
+    .toFile(OUT)
+  console.log(`wrote ${OUT} ${info.width}x${info.height} channels=${info.channels}`)
+} catch (err) {
+  console.error(err)
+  process.exit(1)
+}
 ```
 
 - [ ] **Step 2: 스크립트 실행**
 
-Run: `node scripts/gen-favicon.cjs`
+Run: `node scripts/gen-favicon.mjs`
 Expected: `wrote /home/yakihyuk0728/yakisoba0728.github.io/app/icon.png 512x512 channels=4`
 (`channels=4` = RGBA = 투명도 있음.)
 
@@ -408,7 +412,7 @@ favicon link OK
 - [ ] **Step 6: 커밋**
 
 ```bash
-git add scripts/gen-favicon.cjs app/icon.png app/icon.jpg
+git add scripts/gen-favicon.mjs app/icon.png app/icon.jpg
 git commit -m "fix(favicon): round transparent PNG icon (keep square apple-icon)"
 ```
 
