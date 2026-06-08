@@ -58,7 +58,7 @@ export default function Nav() {
             </a>
           )}
           {profile.socials.email && (
-            <a href={`mailto:${profile.socials.email}`} className="btn-grad ml-2 !h-9 !px-4 !py-0 text-[13px]">
+            <a href={`mailto:${profile.socials.email}`} className="btn-grad ml-2 !h-9 !px-4 !py-0 text-[13px] !min-w-[116px]">
               <T ko="연락하기" en="Get in touch" />
             </a>
           )}
