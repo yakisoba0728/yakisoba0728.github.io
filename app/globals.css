@@ -228,20 +228,9 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
 
 /* ===================================================================
    /preview variant — scoped redesign (does NOT affect the original /)
-   All selectors namespaced: .v2-glow / .marquee-lava / .code-window-glass
+   All selectors namespaced: .marquee-lava / .code-window-glass
+   (배너 워밍 글로우 .v2-glow는 라이브 피드백으로 제거 — 배경은 원본 .pink-glow 사용)
    =================================================================== */
-
-/* ① 배너 워밍 글로우 — 히어로 박스 안에 스코프(풀뷰포트 아님).
-   퍼센트 정지점이 박스 기준이라 HeroV2의 relative 섹션 안에서만 보정됨. */
-.v2-glow {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(96% 72% at 50% 119%, rgba(249,115,22,0.27), rgba(236,90,77,0.14) 40%, transparent 64%),
-    radial-gradient(ellipse 80% 55% at 50% -8%, rgba(236,90,77,0.27), transparent 60%);
-}
 
 /* ② 용암 마퀴 — 글자 속을 흐르는 그라데이션 */
 .marquee-lava .marquee-item {

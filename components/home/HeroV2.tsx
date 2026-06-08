@@ -5,8 +5,7 @@ import { profile } from '@/content/profile'
 
 export default function HeroV2() {
   return (
-    <section className="relative isolate grid items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-24">
-      <div className="v2-glow" aria-hidden="true" />
+    <section className="grid items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-24">
       {/* 좌: 헤드라인 + CTA */}
       <div>
         <Reveal>
