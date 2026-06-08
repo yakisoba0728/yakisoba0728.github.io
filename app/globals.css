@@ -337,7 +337,7 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
   flex-direction: column;
   border-radius: 0;
   box-shadow: none;
-  animation: cw-zoom .26s var(--ease);
+  will-change: transform;
 }
 .code-window-glass.is-max .code-body {
   flex: 1;
@@ -352,7 +352,6 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
   .code-window-glass.is-max .code-body > div { max-width: 880px; margin-inline: auto; }
 }
 @keyframes cw-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes cw-zoom { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
 
 /* 최대화 바의 '축소' 버튼 (터치 발견성) */
 .cw-restore {
@@ -369,12 +368,22 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
 }
 .cw-restore:hover { color: var(--color-fg); border-color: rgba(255, 255, 255, 0.24); }
 
-/* 닫았을 때 중앙에 뜨는 '다시 열기' */
+/* 코드창 호스트(상대 위치) — 닫혀도 자리를 유지해 레이아웃 점프 방지 */
+.cw-host { position: relative; }
+/* 닫힘: 제자리에서 페이드+축소(레이아웃 유지), 그 위 중앙에 '다시 열기' */
+.code-window-glass.is-closed {
+  opacity: 0;
+  transform: scale(.92);
+  pointer-events: none;
+  transition: opacity .26s var(--ease), transform .26s var(--ease);
+}
+/* 닫았을 때 코드창 한가운데 뜨는 '다시 열기' */
 .cw-reopen-wrap {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 240px;
 }
 .cw-reopen {
   display: inline-flex;

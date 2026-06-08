@@ -1,67 +1,122 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+
+const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 // 맥 스타일 코드창 — 신호등 버튼이 실제로 동작한다.
-// 빨강=닫기(중앙에 '다시 열기'), 노랑=최소화(본문 접기), 초록=최대화(화면 전체).
+// 최대화/축소는 코드창의 '실제 위치'에서 퍼지고 모이는 FLIP 애니메이션.
+// 닫기는 제자리에서 페이드+축소되고, 그 한가운데 '다시 열기'가 뜬다.
 export default function CodeWindow() {
   const [closed, setClosed] = useState(false)
   const [minimized, setMinimized] = useState(false)
   const [maximized, setMaximized] = useState(false)
+  const winRef = useRef<HTMLDivElement>(null)
+  const originRect = useRef<DOMRect | null>(null)
+
+  // 진입: 원래 위치/크기 → 풀스크린으로 '퍼지는' FLIP
+  useLayoutEffect(() => {
+    const el = winRef.current
+    const first = originRect.current
+    if (!el || !maximized || !first) return
+    const last = el.getBoundingClientRect()
+    const dx = first.left - last.left
+    const dy = first.top - last.top
+    const sx = first.width / last.width
+    const sy = first.height / last.height
+    el.style.transformOrigin = 'top left'
+    el.style.transition = 'none'
+    el.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`
+    el.getBoundingClientRect() // 강제 reflow → 시작 transform 적용
+    el.style.transition = `transform .34s ${EASE}`
+    el.style.transform = 'translate(0px, 0px) scale(1, 1)'
+    const cleanup = (e?: TransitionEvent) => {
+      // transitionend는 자식(글리프/본문)에서도 버블링됨 → transform 전환만 처리
+      if (e && e.propertyName !== 'transform') return
+      el.removeEventListener('transitionend', cleanup)
+      el.style.transition = ''
+      el.style.transform = ''
+      el.style.transformOrigin = ''
+    }
+    el.addEventListener('transitionend', cleanup)
+    const t = window.setTimeout(cleanup, 440)
+    return () => {
+      window.clearTimeout(t)
+      el.removeEventListener('transitionend', cleanup)
+    }
+  }, [maximized])
+
+  // 축소: 풀스크린 → 원래 위치로 '모이며' 닫힘 (애니메이션 후 상태 해제)
+  const restore = useCallback(() => {
+    const el = winRef.current
+    const first = originRect.current
+    if (!el || !first) {
+      setMaximized(false)
+      return
+    }
+    const last = el.getBoundingClientRect()
+    const dx = first.left - last.left
+    const dy = first.top - last.top
+    const sx = first.width / last.width
+    const sy = first.height / last.height
+    let done = false
+    const finish = (e?: TransitionEvent) => {
+      if (e && e.propertyName !== 'transform') return
+      if (done) return
+      done = true
+      el.removeEventListener('transitionend', finish)
+      el.style.transition = ''
+      el.style.transform = ''
+      el.style.transformOrigin = ''
+      setMaximized(false)
+    }
+    el.style.transformOrigin = 'top left'
+    el.style.transition = `transform .3s ${EASE}`
+    requestAnimationFrame(() => {
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`
+    })
+    el.addEventListener('transitionend', finish)
+    window.setTimeout(finish, 380)
+  }, [])
 
   // 최대화 동안: Esc 로 축소 + 배경 스크롤 잠금
   useEffect(() => {
     if (!maximized) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMaximized(false)
+      if (e.key === 'Escape') restore()
     }
     document.addEventListener('keydown', onKey)
-    const prevOverflow = document.body.style.overflow
+    const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
+      document.body.style.overflow = prev
     }
-  }, [maximized])
+  }, [maximized, restore])
 
-  if (closed) {
-    return (
-      <div className="cw-reopen-wrap">
-        <button
-          type="button"
-          className="cw-reopen"
-          onClick={() => {
-            setClosed(false)
-            setMinimized(false)
-            setMaximized(false)
-          }}
-        >
-          <span className="cw-reopen-dots" aria-hidden="true">
-            <i style={{ background: '#ef4444' }} />
-            <i style={{ background: '#f59e0b' }} />
-            <i style={{ background: '#22c55e' }} />
-          </span>
-          <span>다시 열기</span>
-        </button>
-      </div>
-    )
+  const maximize = () => {
+    const el = winRef.current
+    if (el) originRect.current = el.getBoundingClientRect()
+    setMinimized(false)
+    setMaximized(true)
   }
 
-  const cls = ['code-window', 'code-window-glass', minimized ? 'is-min' : '', maximized ? 'is-max' : '']
+  const cls = [
+    'code-window',
+    'code-window-glass',
+    minimized ? 'is-min' : '',
+    maximized ? 'is-max' : '',
+    closed ? 'is-closed' : '',
+  ]
     .filter(Boolean)
     .join(' ')
 
   return (
-    <>
+    <div className="cw-host">
       {maximized && (
-        <button
-          type="button"
-          className="cw-backdrop"
-          aria-label="최대화 닫기"
-          onClick={() => setMaximized(false)}
-        />
+        <button type="button" className="cw-backdrop" aria-label="최대화 닫기" onClick={restore} />
       )}
-      <div className={cls}>
+      <div ref={winRef} className={cls} aria-hidden={closed ? true : undefined}>
         <div className="code-window-bar">
           <button
             type="button"
@@ -76,8 +131,8 @@ export default function CodeWindow() {
             className="code-dot code-dot--min"
             style={{ background: '#f59e0b' }}
             onClick={() => {
-              setMinimized((v) => !v)
               setMaximized(false)
+              setMinimized((v) => !v)
             }}
             aria-label="최소화"
             title="최소화"
@@ -86,16 +141,13 @@ export default function CodeWindow() {
             type="button"
             className="code-dot code-dot--max"
             style={{ background: '#22c55e' }}
-            onClick={() => {
-              setMaximized((v) => !v)
-              setMinimized(false)
-            }}
+            onClick={() => (maximized ? restore() : maximize())}
             aria-label={maximized ? '축소' : '최대화'}
             title={maximized ? '축소' : '최대화'}
           />
           <span className="ml-2 text-[12px] text-muted" style={{ fontFamily: 'var(--font-mono)' }}>agent.py</span>
           {maximized && (
-            <button type="button" className="cw-restore" onClick={() => setMaximized(false)}>축소 ✕</button>
+            <button type="button" className="cw-restore" onClick={restore}>축소 ✕</button>
           )}
         </div>
         <div className="code-body">
@@ -112,6 +164,18 @@ export default function CodeWindow() {
           <div><span className="c-fn">print</span>(result.status){'  '}<span className="c-com"># shipped ✨</span></div>
         </div>
       </div>
-    </>
+      {closed && (
+        <div className="cw-reopen-wrap">
+          <button type="button" className="cw-reopen" onClick={() => setClosed(false)}>
+            <span className="cw-reopen-dots" aria-hidden="true">
+              <i style={{ background: '#ef4444' }} />
+              <i style={{ background: '#f59e0b' }} />
+              <i style={{ background: '#22c55e' }} />
+            </span>
+            <span>다시 열기</span>
+          </button>
+        </div>
+      )}
+    </div>
   )
 }
