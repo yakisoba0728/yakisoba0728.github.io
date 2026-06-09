@@ -21,11 +21,13 @@ export default function CodeWindow() {
     const el = winRef.current
     if (!el) return
     if (!maximized) {
-      // 축소 직후: is-max가 막 제거됨(창이 다시 in-flow). 남은 인라인 transform을
-      // 페인트 전에 같은 프레임에서 제거 → 풀스크린으로 튀는 플래시 없음.
+      // maximized=false가 되는 모든 경로(restore/최소화/닫기/Esc)에서 인라인 스타일을 일괄 초기화.
+      // host 높이 고정이 특정 경로에만 풀리던 게 최소화 버그의 근본 원인 → 여기서 항상 해제.
+      // (is-max가 제거된 뒤 같은 프레임에서 실행 → 풀스크린 플래시도 없음)
       el.style.transition = ''
       el.style.transform = ''
       el.style.transformOrigin = ''
+      if (hostRef.current) hostRef.current.style.height = ''
       return
     }
     const first = originRect.current
@@ -76,9 +78,7 @@ export default function CodeWindow() {
       if (done) return
       done = true
       el.removeEventListener('transitionend', finish)
-      if (hostRef.current) hostRef.current.style.height = ''
-      // transform/transition 정리는 maximized=false 이후 useLayoutEffect의 !maximized 분기에서
-      // (is-max가 제거된 뒤에 지워야 풀스크린 플래시가 안 생김)
+      // host 높이/transform 정리는 maximized=false 이후 useLayoutEffect의 !maximized 분기에서 일괄 처리
       setMaximized(false)
     }
     // 백드롭은 창이 줄어드는 동안 함께 페이드아웃
@@ -140,25 +140,26 @@ export default function CodeWindow() {
       )}
       <div ref={winRef} className={cls} aria-hidden={closed ? true : undefined}>
         <div className="code-window-bar">
-          <button
-            type="button"
-            className="code-dot code-dot--close"
-            style={{ background: '#ef4444' }}
-            onClick={() => setClosed(true)}
-            aria-label="닫기"
-            title="닫기"
-          />
-          <button
-            type="button"
-            className="code-dot code-dot--min"
-            style={{ background: '#f59e0b' }}
-            onClick={() => {
-              setMaximized(false)
-              setMinimized((v) => !v)
-            }}
-            aria-label="최소화"
-            title="최소화"
-          />
+          {!maximized && (
+            <>
+              <button
+                type="button"
+                className="code-dot code-dot--close"
+                style={{ background: '#ef4444' }}
+                onClick={() => setClosed(true)}
+                aria-label="닫기"
+                title="닫기"
+              />
+              <button
+                type="button"
+                className="code-dot code-dot--min"
+                style={{ background: '#f59e0b' }}
+                onClick={() => setMinimized((v) => !v)}
+                aria-label="최소화"
+                title="최소화"
+              />
+            </>
+          )}
           <button
             type="button"
             className="code-dot code-dot--max"
