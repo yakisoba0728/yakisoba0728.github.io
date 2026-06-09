@@ -21,10 +21,12 @@ export default function CodeWindow() {
     const el = winRef.current
     if (!el) return
     if (!maximized) {
-      // maximized=false가 되는 모든 경로(restore/최소화/닫기/Esc)에서 인라인 스타일을 일괄 초기화.
-      // host 높이 고정이 특정 경로에만 풀리던 게 최소화 버그의 근본 원인 → 여기서 항상 해제.
-      // (is-max가 제거된 뒤 같은 프레임에서 실행 → 풀스크린 플래시도 없음)
-      el.style.transition = ''
+      // maximized=false가 되는 모든 경로(restore/Esc/백드롭)에서 인라인 스타일을 일괄 초기화.
+      // ★ transition을 'none'으로 둔 채 transform을 지워야 '즉시' 사라진다.
+      //   기본 .code-window-glass{transition:transform .26s}가 살아있으면 shrink(가로 dx 포함)→none이
+      //   .26s 동안 애니메이션되어 창이 옆에서 슬라이드해 들어오는 버그("옆에서 튀어나옴")가 난다.
+      //   (다음 최대화 진입 시 transition을 다시 지정하므로 'none'으로 남겨둬도 무해)
+      el.style.transition = 'none'
       el.style.transform = ''
       el.style.transformOrigin = ''
       if (hostRef.current) hostRef.current.style.height = ''
