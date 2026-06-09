@@ -228,9 +228,9 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
 }
 
 /* ===================================================================
-   /preview variant — scoped redesign (does NOT affect the original /)
-   All selectors namespaced: .marquee-lava / .code-window-glass
-   (배너 워밍 글로우 .v2-glow는 라이브 피드백으로 제거 — 배경은 원본 .pink-glow 사용)
+   히어로 리디자인 (루트 / 로 승격됨) — 용암 마퀴 + 글래스 코드창
+   selectors: .marquee-lava (글자 속 흐르는 그라데이션) / .code-window-glass (반투명+블러)
+   배경은 사이트 공통 .pink-glow 사용 (별도 글로우 없음)
    =================================================================== */
 
 /* ② 용암 마퀴 — 줄 전체에 이어진 '하나의' 그라데이션이 통째로 흐름.

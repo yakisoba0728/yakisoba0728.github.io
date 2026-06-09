@@ -33,9 +33,9 @@ export default function Hero() {
         </Reveal>
       </div>
 
-      {/* 우: 코드 윈도우 */}
+      {/* 우: 코드 윈도우 (글래스, 정적 — 신호등은 장식용 span) */}
       <Reveal className="rv-right">
-        <div className="code-window">
+        <div className="code-window code-window-glass">
           <div className="code-window-bar">
             <span className="code-dot" style={{ background: '#ef4444' }} />
             <span className="code-dot" style={{ background: '#f59e0b' }} />
@@ -51,9 +51,9 @@ export default function Hero() {
             <div>orchestrator.<span className="c-fn">add</span>(<span className="c-fn">Agent</span>(<span className="c-str">&quot;builder&quot;</span>))</div>
             <div className="h-4" />
             <div>result = orchestrator.<span className="c-fn">run</span>(</div>
-            <div>{'  '}spec=<span className="c-str">&quot;변화와 함께 성장하기&quot;</span>,</div>
+            <div>{'  '}spec=<span className="c-str">&quot;변화와 함께 성장하기&quot;</span>,</div>
             <div>)</div>
-            <div><span className="c-fn">print</span>(result.status){'  '}<span className="c-com"># shipped ✨</span></div>
+            <div><span className="c-fn">print</span>(result.status){'  '}<span className="c-com"># shipped ✨</span></div>
           </div>
         </div>
       </Reveal>
