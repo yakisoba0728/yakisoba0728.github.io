@@ -6,7 +6,7 @@ import CodeWindow from '@/components/CodeWindow'
 
 export default function HeroV2() {
   return (
-    <section className="grid items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-24">
+    <section className="grid items-start gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-24">
       {/* 좌: 헤드라인 + CTA */}
       <div>
         <Reveal>
