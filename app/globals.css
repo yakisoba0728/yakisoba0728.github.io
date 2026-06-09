@@ -346,8 +346,9 @@ html[data-lang="en"] .kinetic .t-ko { display: none; }
   font-size: 14px;
   line-height: 1.85;
 }
-/* '화면 전체를 가득' — 모든 화면에서 풀스크린(inset:0). 데스크톱에선 코드 본문만 가운데 폭으로. */
-.code-window-glass.is-max .code-body { padding: clamp(18px, 5vw, 48px); }
+/* '화면 전체를 가득' — 풀스크린(inset:0) + 데스크톱에선 코드 본문을 가운데 폭으로.
+   ※ is-max에서 padding을 바꾸면 .code-body의 padding .3s 트랜지션 탓에 축소(is-max 해제) 후
+     본문 padding이 .3s 동안 줄며 창이 "약간 확대됐다 돌아오는" 글리치가 생기므로 override 없음. */
 @media (min-width: 768px) {
   .code-window-glass.is-max .code-body > div { max-width: 880px; margin-inline: auto; }
 }
