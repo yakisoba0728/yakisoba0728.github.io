@@ -19,8 +19,17 @@ export default function CodeWindow() {
   // 진입: 원래 위치/크기 → 풀스크린으로 '퍼지는' FLIP
   useLayoutEffect(() => {
     const el = winRef.current
+    if (!el) return
+    if (!maximized) {
+      // 축소 직후: is-max가 막 제거됨(창이 다시 in-flow). 남은 인라인 transform을
+      // 페인트 전에 같은 프레임에서 제거 → 풀스크린으로 튀는 플래시 없음.
+      el.style.transition = ''
+      el.style.transform = ''
+      el.style.transformOrigin = ''
+      return
+    }
     const first = originRect.current
-    if (!el || !maximized || !first) return
+    if (!first) return
     const last = el.getBoundingClientRect()
     const dx = first.left - last.left
     const dy = first.top - last.top
@@ -67,10 +76,9 @@ export default function CodeWindow() {
       if (done) return
       done = true
       el.removeEventListener('transitionend', finish)
-      el.style.transition = ''
-      el.style.transform = ''
-      el.style.transformOrigin = ''
       if (hostRef.current) hostRef.current.style.height = ''
+      // transform/transition 정리는 maximized=false 이후 useLayoutEffect의 !maximized 분기에서
+      // (is-max가 제거된 뒤에 지워야 풀스크린 플래시가 안 생김)
       setMaximized(false)
     }
     // 백드롭은 창이 줄어드는 동안 함께 페이드아웃
