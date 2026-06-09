@@ -12,6 +12,8 @@ export default function CodeWindow() {
   const [minimized, setMinimized] = useState(false)
   const [maximized, setMaximized] = useState(false)
   const winRef = useRef<HTMLDivElement>(null)
+  const hostRef = useRef<HTMLDivElement>(null)
+  const backdropRef = useRef<HTMLButtonElement>(null)
   const originRect = useRef<DOMRect | null>(null)
 
   // 진입: 원래 위치/크기 → 풀스크린으로 '퍼지는' FLIP
@@ -68,7 +70,16 @@ export default function CodeWindow() {
       el.style.transition = ''
       el.style.transform = ''
       el.style.transformOrigin = ''
+      if (hostRef.current) hostRef.current.style.height = ''
       setMaximized(false)
+    }
+    // 백드롭은 창이 줄어드는 동안 함께 페이드아웃
+    const bd = backdropRef.current
+    if (bd) {
+      bd.style.transition = `opacity .3s ${EASE}`
+      requestAnimationFrame(() => {
+        bd.style.opacity = '0'
+      })
     }
     el.style.transformOrigin = 'top left'
     el.style.transition = `transform .3s ${EASE}`
@@ -96,7 +107,10 @@ export default function CodeWindow() {
 
   const maximize = () => {
     const el = winRef.current
+    const host = hostRef.current
     if (el) originRect.current = el.getBoundingClientRect()
+    // 호스트 높이를 고정 → 창이 fixed로 빠져도 히어로가 리플로우/점프하지 않음
+    if (host) host.style.height = `${host.getBoundingClientRect().height}px`
     setMinimized(false)
     setMaximized(true)
   }
@@ -112,9 +126,9 @@ export default function CodeWindow() {
     .join(' ')
 
   return (
-    <div className="cw-host">
+    <div className="cw-host" ref={hostRef}>
       {maximized && (
-        <button type="button" className="cw-backdrop" aria-label="최대화 닫기" onClick={restore} />
+        <button ref={backdropRef} type="button" className="cw-backdrop" aria-label="최대화 닫기" onClick={restore} />
       )}
       <div ref={winRef} className={cls} aria-hidden={closed ? true : undefined}>
         <div className="code-window-bar">
