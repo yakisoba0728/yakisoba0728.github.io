@@ -32,6 +32,11 @@ const credentials = [
   return by - ay
 })
 
+function awardTeam(detail?: string) {
+  if (!detail) return null
+  return detail.match(/OxB4DC0DE|CURIOUS|Curious/)?.[0] ?? null
+}
+
 export default function Achievements() {
   const awards = [...profile.awards].sort((a, b) => b.year - a.year)
   const activities = [...profile.publicActivities].sort((a, b) => b.year - a.year)
@@ -43,6 +48,7 @@ export default function Achievements() {
         <Reveal stagger className="mt-4 overflow-hidden rounded-xl border border-border bg-surface/60">
           {awards.map((award, index) => {
             const showYear = index === 0 || awards[index - 1].year !== award.year
+            const team = awardTeam(award.detail)
             return (
               <div
                 key={`${award.year}-${award.title}`}
@@ -53,11 +59,7 @@ export default function Achievements() {
                   <h3 className="text-[14px] font-semibold leading-snug text-fg">
                     <T ko={`${award.title} — ${award.result}`} en={`${award.titleEn} — ${award.resultEn}`} />
                   </h3>
-                  {award.detail && (
-                    <p className="mt-1 text-[12px] leading-relaxed text-muted">
-                      <T ko={award.detail} en={award.detailEn ?? award.detail} />
-                    </p>
-                  )}
+                  {team && <p className="mt-1 text-[12px] leading-relaxed text-muted">{team}</p>}
                 </div>
               </div>
             )
