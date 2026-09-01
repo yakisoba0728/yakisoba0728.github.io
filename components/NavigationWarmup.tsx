@@ -24,12 +24,12 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
     const uniqueRoutes = [...new Set(routes.filter((route) => route !== pathname))]
     const idleWindow = window as IdleCapableWindow
     let cancelled = false
-    const timers: number[] = []
+    const timers: ReturnType<typeof setTimeout>[] = []
 
     const warm = () => {
       uniqueRoutes.forEach((route, index) => {
         timers.push(
-          globalThis.setTimeout(() => {
+          setTimeout(() => {
             if (!cancelled) router.prefetch(route)
           }, index * 35),
         )
@@ -40,7 +40,7 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
     if (typeof idleWindow.requestIdleCallback === 'function') {
       idleId = idleWindow.requestIdleCallback(warm, { timeout: 1200 })
     } else {
-      timers.push(globalThis.setTimeout(warm, 120))
+      timers.push(setTimeout(warm, 120))
     }
 
     const prefetchFromEvent = (event: Event) => {
@@ -61,8 +61,6 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
       const href = internalHref(anchor.getAttribute('href'))
       if (!href || href === pathname) return
 
-      // Never delay the navigation. Start feedback immediately while Next loads
-      // the already-prefetched route in parallel.
       const shell = document.querySelector<HTMLElement>('[data-page-shell]')
       if (shell && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof shell.animate === 'function') {
         shell.getAnimations().forEach((animation) => animation.cancel())
@@ -103,7 +101,7 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
 
     return () => {
       cancelled = true
-      timers.forEach((timer) => globalThis.clearTimeout(timer))
+      timers.forEach((timer) => clearTimeout(timer))
       if (idleId !== undefined && typeof idleWindow.cancelIdleCallback === 'function') {
         idleWindow.cancelIdleCallback(idleId)
       }
