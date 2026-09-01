@@ -29,7 +29,7 @@ export default function PortfolioPage() {
           {ongoing.length > 0 && (
             <section className="mt-12">
               <Reveal><p className="section-label"><T ko="진행 중" en="In progress" /></p></Reveal>
-              <Reveal stagger className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <Reveal stagger data-page-stagger className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {ongoing.map((p) => <ProjectCard key={p.slug} project={p} />)}
               </Reveal>
             </section>
