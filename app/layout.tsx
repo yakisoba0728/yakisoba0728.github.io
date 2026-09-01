@@ -6,7 +6,9 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ScrollProgress from '@/components/ScrollProgress'
 import BackToTop from '@/components/BackToTop'
+import NavigationWarmup from '@/components/NavigationWarmup'
 import { profile } from '@/content/profile'
+import { getAllPosts, getAllProjects } from '@/lib/content'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const jetbrains = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains', display: 'swap' })
@@ -29,6 +31,15 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const warmRoutes = [
+    '/',
+    '/about',
+    '/portfolio',
+    '/blog',
+    ...getAllProjects().map((project) => `/portfolio/${project.slug}`),
+    ...getAllPosts().map((post) => `/blog/${post.slug}`),
+  ]
+
   return (
     <html lang="ko" className={`${inter.variable} ${jetbrains.variable} ${pretendard.variable}`} suppressHydrationWarning>
       <head>
@@ -40,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-bg text-body font-sans antialiased" suppressHydrationWarning>
+        <NavigationWarmup routes={warmRoutes} />
         <ScrollProgress />
         <div className="pink-glow" aria-hidden />
         <div className="grain" aria-hidden />
