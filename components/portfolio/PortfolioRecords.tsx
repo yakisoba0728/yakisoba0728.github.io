@@ -3,6 +3,7 @@
 import { ChevronDown } from 'lucide-react'
 import T from '@/components/T'
 import { profile } from '@/content/profile'
+import { educationDegree } from '@/lib/education'
 
 const topcit = {
   title: 'TOPCIT',
@@ -70,10 +71,7 @@ export default function PortfolioRecords() {
           <T ko="수상 · 자격 · 교육 · 활동" en="Awards, credentials, education & activity" />
         </h2>
         <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-body">
-          <T
-            ko="항목을 누르면 상세 내용을 확인할 수 있습니다."
-            en="Open any row to see more details."
-          />
+          <T ko="항목을 누르면 상세 내용을 확인할 수 있습니다." en="Open any row to see more details." />
         </p>
         <div className="mt-4 flex flex-wrap gap-2 text-[11px]">
           <a href="#awards" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="수상·대회" en="Awards & competitions" /></a>
@@ -141,15 +139,17 @@ export default function PortfolioRecords() {
             </div>
             {profile.education.map((item, index) => {
               const en = profile.educationEn[index]
+              const degreeKo = educationDegree(item.org, item.period, item.degree, 'ko')
+              const degreeEn = educationDegree(en.org, en.period, en.degree, 'en')
               return (
                 <RecordDetails
                   key={`${item.org}-${item.period}`}
                   title={item.org}
                   titleEn={en.org}
-                  meta={`${item.degree} · ${item.period}`}
-                  metaEn={`${en.degree} · ${en.period}`}
+                  meta={`${degreeKo} · ${item.period}`}
+                  metaEn={`${degreeEn} · ${en.period}`}
                 >
-                  <p><T ko={item.degree} en={en.degree} /></p>
+                  <p><T ko={degreeKo} en={degreeEn} /></p>
                   <p className="mt-1 text-[12px] text-muted"><T ko={item.period} en={en.period} /></p>
                 </RecordDetails>
               )
