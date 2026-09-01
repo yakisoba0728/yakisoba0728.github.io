@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Reveal from '@/components/Reveal'
-import Achievements from '@/components/home/Achievements'
 import Skills from '@/components/home/Skills'
 import Timeline from '@/components/home/Timeline'
 import { profile } from '@/content/profile'
@@ -23,7 +22,6 @@ export default function AboutPage() {
         </div>
       </Reveal>
 
-      <Achievements />
       <Timeline />
       <Skills />
     </div>
