@@ -3,6 +3,11 @@
 import { useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
+type IdleCapableWindow = Window & {
+  requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number
+  cancelIdleCallback?: (handle: number) => void
+}
+
 function internalHref(value: string | null): string | null {
   if (!value || !value.startsWith('/') || value.startsWith('//')) return null
   const [path] = value.split('#')
@@ -17,13 +22,14 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
 
   useEffect(() => {
     const uniqueRoutes = [...new Set(routes.filter((route) => route !== pathname))]
+    const idleWindow = window as IdleCapableWindow
     let cancelled = false
     const timers: number[] = []
 
     const warm = () => {
       uniqueRoutes.forEach((route, index) => {
         timers.push(
-          window.setTimeout(() => {
+          globalThis.setTimeout(() => {
             if (!cancelled) router.prefetch(route)
           }, index * 35),
         )
@@ -31,10 +37,10 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
     }
 
     let idleId: number | undefined
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(warm, { timeout: 1200 })
+    if (typeof idleWindow.requestIdleCallback === 'function') {
+      idleId = idleWindow.requestIdleCallback(warm, { timeout: 1200 })
     } else {
-      timers.push(window.setTimeout(warm, 120))
+      timers.push(globalThis.setTimeout(warm, 120))
     }
 
     const prefetchFromEvent = (event: Event) => {
@@ -97,8 +103,10 @@ export default function NavigationWarmup({ routes }: { routes: string[] }) {
 
     return () => {
       cancelled = true
-      timers.forEach((timer) => window.clearTimeout(timer))
-      if (idleId !== undefined && 'cancelIdleCallback' in window) window.cancelIdleCallback(idleId)
+      timers.forEach((timer) => globalThis.clearTimeout(timer))
+      if (idleId !== undefined && typeof idleWindow.cancelIdleCallback === 'function') {
+        idleWindow.cancelIdleCallback(idleId)
+      }
       document.removeEventListener('pointerover', prefetchFromEvent, true)
       document.removeEventListener('focusin', prefetchFromEvent, true)
       document.removeEventListener('touchstart', prefetchFromEvent, true)
