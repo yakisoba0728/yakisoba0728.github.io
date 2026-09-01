@@ -3,7 +3,6 @@ import Reveal from '@/components/Reveal'
 import ProjectCard from '@/components/ProjectCard'
 import PortfolioRecords from '@/components/portfolio/PortfolioRecords'
 import { getAllProjects } from '@/lib/content'
-import { profile } from '@/content/profile'
 import T from '@/components/T'
 import EmptyState from '@/components/EmptyState'
 
@@ -13,7 +12,6 @@ export default function PortfolioPage() {
   const projects = getAllProjects()
   const ongoing = projects.filter((p) => p.frontmatter.status === 'ongoing')
   const rest = projects.filter((p) => p.frontmatter.status !== 'ongoing')
-  const credentialCount = profile.credentials.length + 1
 
   return (
     <div className="py-10 md:py-14">
@@ -24,11 +22,11 @@ export default function PortfolioPage() {
           <T ko="실제로 개발한 프로젝트와 수상·대회, 자격·증서, 교육, 공개 활동 이력을 한곳에 정리했습니다." en="A single place for projects I have built, awards and competitions, credentials, education, and public activities." />
         </p>
         <div className="mt-5 flex flex-wrap gap-2 text-[11px]">
-          <a href="#projects" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko={`프로젝트 ${projects.length}`} en={`${projects.length} projects`} /></a>
-          <a href="#awards" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko={`수상·대회 ${profile.awards.length}`} en={`${profile.awards.length} awards & competitions`} /></a>
-          <a href="#credentials" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko={`자격·증서 ${credentialCount}`} en={`${credentialCount} credentials`} /></a>
-          <a href="#education" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko={`교육 ${profile.education.length}`} en={`${profile.education.length} education records`} /></a>
-          <a href="#activity" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko={`활동 ${profile.publicActivities.length}`} en={`${profile.publicActivities.length} activity record`} /></a>
+          <a href="#projects" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="프로젝트" en="Projects" /></a>
+          <a href="#awards" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="수상·대회" en="Awards & competitions" /></a>
+          <a href="#credentials" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="자격·증서" en="Credentials" /></a>
+          <a href="#education" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="교육" en="Education" /></a>
+          <a href="#activity" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="활동" en="Activity" /></a>
         </div>
       </Reveal>
 
