@@ -1,0 +1,17 @@
+---
+title: Freeflow Cloud
+period: 2026.06
+role: 개인 프로젝트 · GPU Cloud Control Plane
+stack: [NestJS, k3s, HAMi, PostgreSQL]
+repo: https://github.com/yakisoba0728/freeflow-cloud
+visibility: public
+status: prototype
+featured: false
+order: 5
+published: true
+---
+
+## 한 줄 소개
+한 장의 고가 GPU를 여러 사용자가 안전하게 나눠 쓸 수 있도록 자동으로 작업공간을 만들고 회수하는 GPU 대여 플랫폼입니다.
+
+k3s + HAMi 환경에서 GPU 메모리를 분할하고, 사용자별 샌드박스 생성·정지·재개·삭제, PVC 영속화, 웹/SSH 접속, 동적 GPU 인벤토리를 제공합니다. 실제 H100에서 GPU 메모리 분할을 검증했습니다.

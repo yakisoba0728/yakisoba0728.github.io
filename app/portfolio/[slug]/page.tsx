@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { ExternalLink } from 'lucide-react'
 import { GithubIcon } from '@/components/icons'
 import { getAllProjects, getProject } from '@/lib/content'
+import { statusLabel, visibilityLabel } from '@/lib/project-meta'
 import { Mdx } from '@/components/mdx'
 import T from '@/components/T'
 
@@ -26,6 +27,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const project = getProject(slug)
   if (!project) notFound()
   const { frontmatter, content } = project
+  const visibility = visibilityLabel(frontmatter.visibility)
+  const status = statusLabel(frontmatter.status)
 
   return (
     <article className="mx-auto max-w-[820px] py-14 md:py-20">
@@ -41,15 +44,22 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       </ViewTransition>
 
       <div className="mt-5 flex flex-wrap gap-1.5">
+        <span className="chip text-[11px]"><T ko={visibility.ko} en={visibility.en} /></span>
+        <span className="chip text-[11px]"><T ko={status.ko} en={status.en} /></span>
         {frontmatter.stack.map((s) => (
           <span key={s} className="chip text-[11px]">{s}</span>
         ))}
       </div>
-      <div className="mt-4 flex gap-4">
-        {frontmatter.repo && (
+      <div className="mt-4 flex flex-wrap gap-4">
+        {frontmatter.repo && frontmatter.visibility !== 'private' && (
           <a href={frontmatter.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[14px] font-medium text-accent hover:underline">
             <GithubIcon size={15} /> <T ko="저장소" en="Repository" />
           </a>
+        )}
+        {frontmatter.visibility === 'private' && (
+          <span className="inline-flex items-center gap-1.5 text-[14px] font-medium text-muted">
+            <GithubIcon size={15} /> <T ko="비공개 저장소" en="Private repository" />
+          </span>
         )}
         {frontmatter.demo && (
           <a href={frontmatter.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[14px] font-medium text-accent hover:underline">

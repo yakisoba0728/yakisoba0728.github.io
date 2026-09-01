@@ -12,7 +12,8 @@ export interface ExperienceItem {
   org: string
   role: string
   period: string
-  summary: string
+  summary?: string
+  highlights?: string[]
 }
 export interface EducationItem {
   org: string
@@ -48,6 +49,7 @@ export interface Profile {
   activities: ActivityItem[]
   activitiesEn: ActivityItem[]
   experience: ExperienceItem[]
+  experienceEn: ExperienceItem[]
   education: EducationItem[]
   educationEn: EducationItem[]
 }
@@ -89,14 +91,14 @@ export const profile: Profile = {
     { category: 'Infra / Tools', items: ['PostgreSQL', 'pgvector', 'Docker', 'AWS', 'Vercel', 'Git'] },
   ],
   now: [
-    '멀티 에이전트 오케스트레이션 프레임워크를 만드는 중',
-    'vLLM 기반 로컬 LLM 추론 최적화를 실험하는 중',
-    'RAG 파이프라인 평가 자동화를 공부하는 중',
+    'Waple — macOS용 Wallpaper Engine 호환 런타임과 Metal 렌더러 개발',
+    'VALORANT Replay Intelligence — .vrf 파서와 경기 분석 파이프라인 고도화',
+    'GBSW Platform — 교내 통합관리시스템 기능·안정성 개선',
   ],
   nowEn: [
-    'Building a multi-agent orchestration framework',
-    'Experimenting with local LLM inference on vLLM',
-    'Studying automated RAG evaluation',
+    'Waple — building a Wallpaper Engine-compatible runtime and Metal renderer for macOS',
+    'VALORANT Replay Intelligence — improving the .vrf parser and match-analysis pipeline',
+    'GBSW Platform — improving features and reliability of the school management platform',
   ],
   activities: [
     { title: '교내 AI 해커톤 대상', org: '경북소프트웨어마이스터고', period: '2025' },
@@ -108,11 +110,44 @@ export const profile: Profile = {
     { title: 'Open-source contributions (LLM ecosystem)', period: '2025 — Present' },
     { title: 'Shipped numerous side projects', period: '2024 — Present' },
   ],
-  experience: [],
+  experience: [
+    {
+      org: 'Weirdhost',
+      role: 'R&D',
+      period: '현재',
+      highlights: [
+        '프로덕션 서비스를 엔드투엔드로 관리·개발·운영했습니다.',
+        '음성 생성 AI를 위한 데이터셋을 수집하고 정제했습니다.',
+      ],
+    },
+  ],
+  experienceEn: [
+    {
+      org: 'Weirdhost',
+      role: 'R&D',
+      period: 'Present',
+      highlights: [
+        'Managed, developed, and operated production services end-to-end.',
+        'Collected and curated datasets for voice generation AI.',
+      ],
+    },
+  ],
   education: [
-    { org: '경북소프트웨어마이스터고등학교', degree: '소프트웨어 개발', period: '재학 중' },
+    { org: '경북소프트웨어마이스터고등학교', degree: '학생', period: '2026 — 현재' },
+    { org: '대구대학교 정보보호영재교육원', degree: '심화과정', period: '2026 — 현재' },
+    { org: '대구대학교 정보보호영재교육원', degree: '심화과정', period: '2025' },
+    { org: '대구대학교 정보보호영재교육원', degree: '주니어과정', period: '2024' },
+    { org: '대구대학교 정보보호영재교육원', degree: '기초과정', period: '2023' },
+    { org: '산자연중학교', degree: '학생', period: '2023 — 2025' },
+    { org: '정평초등학교', degree: '학생', period: '2017 — 2022' },
   ],
   educationEn: [
-    { org: 'Gyeongbuk Software Meister High School', degree: 'Software Development', period: 'Enrolled' },
+    { org: 'Gyeongbuk Software Meister High School', degree: 'Student', period: '2026 — Present' },
+    { org: 'Daegu University Gifted Education Center for Information Security', degree: 'Advanced Course', period: '2026 — Present' },
+    { org: 'Daegu University Gifted Education Center for Information Security', degree: 'Advanced Course', period: '2025' },
+    { org: 'Daegu University Gifted Education Center for Information Security', degree: 'Junior Course', period: '2024' },
+    { org: 'Daegu University Gifted Education Center for Information Security', degree: 'Basic Course', period: '2023' },
+    { org: 'Sanjayeon Middle School', degree: 'Student', period: '2023 — 2025' },
+    { org: 'Jeongpyeong Elementary School', degree: 'Student', period: '2017 — 2022' },
   ],
 }

@@ -1,0 +1,24 @@
+---
+title: Waple
+period: 2026.07 – 현재
+role: 개인 프로젝트 · macOS 시스템/그래픽스
+stack: [Swift, Metal, SwiftUI, JavaScriptCore]
+repo: https://github.com/yakisoba0728/Waple
+visibility: public
+status: ongoing
+featured: true
+order: 1
+published: true
+---
+
+## 한 줄 소개
+macOS에서 Wallpaper Engine 프로젝트를 네이티브로 재생하기 위해 만든 호환 런타임입니다.
+
+## 구현
+`scene.pkg`, 비디오, 웹 월페이퍼를 지원하며 실제 scene 데이터를 Metal로 렌더링합니다. Wallpaper Engine의 GLSL 셰이더를 Metal Shading Language로 변환하고, 파티클·3D 메시·puppet warp·오디오 반응형 효과까지 직접 구현했습니다.
+
+## Reverse Engineering
+별도 공개 저장소인 [`Waple-wallpaper-source`](https://github.com/yakisoba0728/Waple-wallpaper-source)에서 Wallpaper Engine 2.8.42를 Ghidra·Frida·코퍼스 분석으로 역공학하고 PKG/TEX/MDL 및 렌더링 동작을 구현 가능한 수준의 규격으로 정리했습니다.
+
+## 현재
+실제 씬 코퍼스와 자동 검증을 이용해 렌더링 호환성과 안정성을 계속 높이고 있습니다.

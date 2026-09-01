@@ -12,6 +12,9 @@ export interface Post {
   content: string // raw MDX body
 }
 
+export type ProjectVisibility = 'public' | 'private' | 'mixed'
+export type ProjectStatus = 'ongoing' | 'released' | 'service' | 'completed' | 'prototype'
+
 export interface ProjectFrontmatter {
   title: string
   period: string
@@ -20,6 +23,8 @@ export interface ProjectFrontmatter {
   thumbnail?: string
   repo?: string
   demo?: string
+  visibility: ProjectVisibility
+  status: ProjectStatus
   featured: boolean
   order: number
   published: boolean

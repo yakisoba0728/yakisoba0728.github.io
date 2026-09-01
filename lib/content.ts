@@ -28,6 +28,8 @@ export function parseProject(slug: string, raw: string): Project {
     thumbnail: data.thumbnail,
     repo: data.repo,
     demo: data.demo,
+    visibility: data.visibility ?? 'public',
+    status: data.status ?? 'completed',
     featured: data.featured ?? false,
     order: data.order ?? 0,
     published: data.published ?? true,
