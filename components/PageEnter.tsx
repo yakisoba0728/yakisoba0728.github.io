@@ -12,9 +12,6 @@ export default function PageEnter({ children }: { children: React.ReactNode }) {
 
     const animations: Animation[] = []
 
-    // Next.js template.tsx remounts on every route change, so this animation
-    // is guaranteed to start once for every page navigation. It does not rely
-    // on the experimental View Transition API.
     if (typeof root.animate === 'function') {
       animations.push(
         root.animate(
@@ -23,7 +20,7 @@ export default function PageEnter({ children }: { children: React.ReactNode }) {
             { opacity: 1, transform: 'translateY(0)' },
           ],
           {
-            duration: 420,
+            duration: 360,
             easing: 'cubic-bezier(.2,.75,.2,1)',
             fill: 'both',
           },
@@ -31,9 +28,6 @@ export default function PageEnter({ children }: { children: React.ReactNode }) {
       )
     }
 
-    // Pages can opt a top-of-page grid into a deterministic stagger. This is
-    // deliberately separate from scroll Reveal so entering /portfolio always
-    // has a visible card entrance even when every card is already in viewport.
     const groups = root.querySelectorAll<HTMLElement>('[data-page-stagger]')
     groups.forEach((group) => {
       Array.from(group.children).forEach((child, index) => {
@@ -41,12 +35,12 @@ export default function PageEnter({ children }: { children: React.ReactNode }) {
         animations.push(
           child.animate(
             [
-              { opacity: 0, transform: 'translateY(18px) scale(.985)' },
+              { opacity: 0, transform: 'translateY(16px) scale(.987)' },
               { opacity: 1, transform: 'translateY(0) scale(1)' },
             ],
             {
-              duration: 460,
-              delay: 120 + index * 60,
+              duration: 420,
+              delay: 70 + index * 55,
               easing: 'cubic-bezier(.2,.75,.2,1)',
               fill: 'both',
             },
@@ -58,5 +52,5 @@ export default function PageEnter({ children }: { children: React.ReactNode }) {
     return () => animations.forEach((animation) => animation.cancel())
   }, [])
 
-  return <div ref={ref}>{children}</div>
+  return <div ref={ref} data-page-shell>{children}</div>
 }
