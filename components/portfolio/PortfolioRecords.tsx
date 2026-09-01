@@ -47,7 +47,18 @@ function RecordDetails({
 }
 
 export default function PortfolioRecords() {
-  const credentials = [...profile.credentials, topcit]
+  const credentials = [
+    ...profile.credentials.map((credential) =>
+      credential.title.startsWith('DIAT')
+        ? {
+            ...credential,
+            detail: `${credential.detail} · 자격번호 DIAT-2023-008172`,
+            detailEn: `${credential.detailEn} · certificate no. DIAT-2023-008172`,
+          }
+        : credential,
+    ),
+    topcit,
+  ]
   const awards = [...profile.awards].sort((a, b) => b.year - a.year)
 
   return (
@@ -74,7 +85,7 @@ export default function PortfolioRecords() {
       </div>
 
       <div className="mt-6 grid gap-4 xl:grid-cols-2">
-        <section id="awards" className="glass overflow-hidden">
+        <section id="awards" className="glass overflow-hidden scroll-mt-24">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <p className="section-label">Awards & Competitions</p>
             <span className="text-[11px] text-muted">{awards.length}</span>
@@ -108,7 +119,7 @@ export default function PortfolioRecords() {
         </section>
 
         <div className="grid content-start gap-4">
-          <section id="credentials" className="glass overflow-hidden">
+          <section id="credentials" className="glass overflow-hidden scroll-mt-24">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <p className="section-label">Credentials</p>
               <span className="text-[11px] text-muted">{credentials.length}</span>
@@ -129,7 +140,7 @@ export default function PortfolioRecords() {
             ))}
           </section>
 
-          <section id="education" className="glass overflow-hidden">
+          <section id="education" className="glass overflow-hidden scroll-mt-24">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div>
                 <p className="section-label">Education</p>
@@ -156,7 +167,7 @@ export default function PortfolioRecords() {
             })}
           </section>
 
-          <section id="activity" className="glass overflow-hidden">
+          <section id="activity" className="glass overflow-hidden scroll-mt-24">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <p className="section-label">Selected Activity</p>
               <span className="text-[11px] text-muted">{profile.publicActivities.length}</span>
