@@ -9,7 +9,6 @@ import { profile } from '@/content/profile'
 const cardLabel = 'text-[12px] font-semibold uppercase tracking-[0.1em] text-muted'
 
 export default function Bento() {
-  const emptyLine = <EmptyState className="mt-3 text-[14px]" />
   const featured = getFeaturedProjects().slice(0, 3)
 
   return (
@@ -50,7 +49,24 @@ export default function Bento() {
 
         <div className="glass card-hover bento-card col-3">
           <p className={cardLabel}>Activities</p>
-          {emptyLine}
+          <ul className="mt-3 space-y-3">
+            {profile.activities.map((item, i) => {
+              const en = profile.activitiesEn[i]
+              return (
+                <li key={`${item.title}-${item.period ?? ''}`} className="border-b border-border pb-3 last:border-0 last:pb-0">
+                  <p className="text-[14px] font-medium leading-snug text-fg"><T ko={item.title} en={en.title} /></p>
+                  {(item.org || item.period) && (
+                    <p className="mt-1 text-[12px] text-muted">
+                      <T
+                        ko={[item.org, item.period].filter(Boolean).join(' · ')}
+                        en={[en.org, en.period].filter(Boolean).join(' · ')}
+                      />
+                    </p>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
         </div>
 
         {featured.length > 0 ? featured.map((project) => (
