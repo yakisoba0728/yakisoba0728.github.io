@@ -7,12 +7,12 @@ type Props = React.HTMLAttributes<HTMLDivElement> & {
   variant?: 'up' | 'left' | 'right' | 'scale' | 'blur'
 }
 
-const PRELOAD_PX = 96
+const PRELOAD_PX = 112
 
 export default function Reveal({ stagger = false, variant = 'up', className = '', children, ...rest }: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  // SSR/initial paint is visible on purpose. Elements below the fold are hidden
-  // after hydration, before the user can scroll to them, then revealed on entry.
+  // Keep SSR and the first paint visible. Only content that is genuinely below
+  // the fold is hidden after layout is known.
   const [shown, setShown] = useState(true)
 
   useLayoutEffect(() => {
@@ -24,44 +24,81 @@ export default function Reveal({ stagger = false, variant = 'up', className = ''
       return
     }
 
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight
-    const rect = el.getBoundingClientRect()
+    let io: IntersectionObserver | null = null
+    let raf = 0
+    let finished = false
 
-    // Anything already visible (or just below the fold) must be rendered immediately.
-    // This prevents above-the-fold content from looking missing while hydration/IO starts.
-    if (rect.top <= viewportHeight + PRELOAD_PX || rect.bottom < 0) {
+    const cleanupPassiveChecks = () => {
+      window.removeEventListener('scroll', scheduleCheck)
+      window.removeEventListener('resize', scheduleCheck)
+      window.removeEventListener('pageshow', scheduleCheck)
+    }
+
+    const finish = () => {
+      if (finished) return
+      finished = true
+      setShown(true)
+      io?.disconnect()
+      cleanupPassiveChecks()
+    }
+
+    const isNearViewport = () => {
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight
+      const rect = el.getBoundingClientRect()
+      return rect.top <= viewportHeight + PRELOAD_PX && rect.bottom >= -PRELOAD_PX
+    }
+
+    const check = () => {
+      raf = 0
+      if (isNearViewport()) finish()
+    }
+
+    function scheduleCheck() {
+      if (raf || finished) return
+      raf = window.requestAnimationFrame(check)
+    }
+
+    // Above-the-fold content is never hidden. This also catches content whose
+    // final layout moved upward during a route transition.
+    if (isNearViewport()) {
       setShown(true)
       return
     }
 
-    // Only genuinely off-screen content starts hidden.
     setShown(false)
 
-    if (typeof IntersectionObserver === 'undefined') {
-      setShown(true)
-      return
+    // IntersectionObserver is the primary path, while passive geometry checks
+    // are an independent fallback for browser timing, bfcache, resize and route
+    // transition edge cases.
+    if (typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) finish()
+        },
+        {
+          threshold: 0.01,
+          rootMargin: `0px 0px ${PRELOAD_PX}px 0px`,
+        },
+      )
+      io.observe(el)
     }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setShown(true)
-            io.disconnect()
-            break
-          }
-        }
-      },
-      {
-        threshold: 0.04,
-        // Reveal slightly before the element actually enters the viewport so
-        // scrolling never exposes a blank hole.
-        rootMargin: `0px 0px ${PRELOAD_PX}px 0px`,
-      },
-    )
+    window.addEventListener('scroll', scheduleCheck, { passive: true })
+    window.addEventListener('resize', scheduleCheck, { passive: true })
+    window.addEventListener('pageshow', scheduleCheck)
 
-    io.observe(el)
-    return () => io.disconnect()
+    // Re-check on the next two frames because fonts, view transitions and
+    // responsive layout can change the element position immediately after mount.
+    scheduleCheck()
+    const secondFrame = window.requestAnimationFrame(scheduleCheck)
+
+    return () => {
+      finished = true
+      io?.disconnect()
+      cleanupPassiveChecks()
+      if (raf) window.cancelAnimationFrame(raf)
+      window.cancelAnimationFrame(secondFrame)
+    }
   }, [])
 
   const variantClass = stagger
