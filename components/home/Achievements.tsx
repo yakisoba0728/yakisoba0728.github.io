@@ -26,10 +26,15 @@ const credentials = [
     evidenceEn: 'Unverified',
     year: '—',
   },
-]
+].sort((a, b) => {
+  const ay = a.year === '—' ? -1 : Number(a.year)
+  const by = b.year === '—' ? -1 : Number(b.year)
+  return by - ay
+})
 
 export default function Achievements() {
   const awards = [...profile.awards].sort((a, b) => b.year - a.year)
+  const activities = [...profile.publicActivities].sort((a, b) => b.year - a.year)
 
   return (
     <>
@@ -71,23 +76,21 @@ export default function Achievements() {
                 className="grid gap-1.5 border-b border-border px-4 py-3 last:border-b-0 sm:grid-cols-[120px_1fr] sm:gap-4 md:px-5"
               >
                 <div className="text-[13px] font-medium text-accent">{showYear ? credential.year : ''}</div>
-                <div className="min-w-0">
-                  <h3 className="text-[14px] font-semibold leading-snug text-fg">
-                    <T ko={`${credential.title} — ${credential.detail}`} en={`${credential.titleEn} — ${credential.detailEn}`} />
-                  </h3>
-                </div>
+                <h3 className="text-[14px] font-semibold leading-snug text-fg">
+                  <T ko={`${credential.title} — ${credential.detail}`} en={`${credential.titleEn} — ${credential.detailEn}`} />
+                </h3>
               </div>
             )
           })}
         </Reveal>
       </section>
 
-      {profile.publicActivities.length > 0 && (
+      {activities.length > 0 && (
         <section className="pt-5 pb-4 md:pt-6 md:pb-5">
           <Reveal><p className="section-label">Activity</p></Reveal>
           <Reveal stagger className="mt-4 overflow-hidden rounded-xl border border-border bg-surface/60">
-            {profile.publicActivities.map((activity, index) => {
-              const showYear = index === 0 || profile.publicActivities[index - 1].year !== activity.year
+            {activities.map((activity, index) => {
+              const showYear = index === 0 || activities[index - 1].year !== activity.year
               return (
                 <div
                   key={`${activity.year}-${activity.title}`}
