@@ -1,9 +1,19 @@
 'use client'
 
+import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import T from '@/components/T'
 import { profile } from '@/content/profile'
 import { educationDegree } from '@/lib/education'
+
+type Tab = 'awards' | 'credentials' | 'education' | 'activity'
+
+const tabs: { id: Tab; ko: string; en: string }[] = [
+  { id: 'awards', ko: '수상 · 대회', en: 'Awards' },
+  { id: 'credentials', ko: '자격 · 증서', en: 'Credentials' },
+  { id: 'education', ko: '교육', en: 'Education' },
+  { id: 'activity', ko: '활동', en: 'Activity' },
+]
 
 const topcit = {
   title: 'TOPCIT',
@@ -12,42 +22,63 @@ const topcit = {
   detailEn: 'Possession and score not yet verified',
 }
 
-function RecordDetails({
+function ExpandableRow({
+  period,
   title,
   titleEn,
-  meta,
-  metaEn,
-  children,
+  result,
+  resultEn,
+  detail,
+  detailEn,
 }: {
+  period: string
   title: string
   titleEn: string
-  meta?: string
-  metaEn?: string
-  children: React.ReactNode
+  result?: string
+  resultEn?: string
+  detail?: string
+  detailEn?: string
 }) {
-  return (
-    <details className="group border-b border-border last:border-0">
-      <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 transition-colors hover:bg-surface-2/50 [&::-webkit-details-marker]:hidden">
-        <div className="min-w-0 flex-1">
-          <p className="text-[14px] font-semibold leading-snug text-fg">
-            <T ko={title} en={titleEn} />
-          </p>
-          {(meta || metaEn) && (
-            <p className="mt-1 text-[11px] text-muted">
-              <T ko={meta ?? ''} en={metaEn ?? meta ?? ''} />
-            </p>
+  const hasDetail = Boolean(detail || detailEn)
+
+  if (!hasDetail) {
+    return (
+      <div className="grid gap-1.5 border-b border-border px-4 py-3 last:border-b-0 sm:grid-cols-[92px_1fr] sm:gap-4 md:px-5">
+        <div className="text-[12px] font-medium text-accent">{period}</div>
+        <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+          <p className="text-[14px] font-semibold leading-snug text-fg"><T ko={title} en={titleEn} /></p>
+          {result && (
+            <p className="shrink-0 text-[12px] font-medium text-muted"><T ko={result} en={resultEn ?? result} /></p>
           )}
         </div>
-        <ChevronDown size={15} className="shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" />
+      </div>
+    )
+  }
+
+  return (
+    <details className="group border-b border-border last:border-b-0">
+      <summary className="grid cursor-pointer list-none gap-1.5 px-4 py-3 transition-colors hover:bg-surface-2/40 sm:grid-cols-[92px_1fr] sm:gap-4 md:px-5 [&::-webkit-details-marker]:hidden">
+        <div className="text-[12px] font-medium text-accent">{period}</div>
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="min-w-0 flex-1 sm:flex sm:justify-between sm:gap-4">
+            <p className="text-[14px] font-semibold leading-snug text-fg"><T ko={title} en={titleEn} /></p>
+            {result && (
+              <p className="mt-1 shrink-0 text-[12px] font-medium text-muted sm:mt-0"><T ko={result} en={resultEn ?? result} /></p>
+            )}
+          </div>
+          <ChevronDown size={14} className="mt-0.5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" />
+        </div>
       </summary>
-      <div className="border-t border-border bg-bg-2/40 px-4 py-3.5 text-[13px] leading-relaxed text-body">
-        {children}
+      <div className="border-t border-border bg-bg-2/35 px-4 py-3 text-[12px] leading-relaxed text-body sm:pl-[128px] md:pr-5">
+        <T ko={detail ?? ''} en={detailEn ?? detail ?? ''} />
       </div>
     </details>
   )
 }
 
 export default function PortfolioRecords() {
+  const [active, setActive] = useState<Tab>('awards')
+
   const credentials = [
     ...profile.credentials.map((credential) =>
       credential.title.startsWith('DIAT')
@@ -60,119 +91,113 @@ export default function PortfolioRecords() {
     ),
     topcit,
   ]
-  const awards = [...profile.awards].sort((a, b) => b.year - a.year)
-  const awardYears = [...new Set(awards.map((award) => award.year))].sort((a, b) => b - a)
+
+  const credentialPeriod = (title: string) => {
+    if (title.startsWith('DIAT')) return '2023'
+    if (title.includes('정보보호영재교육원')) return '2025'
+    if (title.includes('입학성적')) return '2026'
+    if (title === 'TOPCIT') return '—'
+    return '—'
+  }
 
   return (
-    <section id="records" className="mt-14 border-t border-border pt-10">
-      <div>
-        <p className="section-label">Records</p>
-        <h2 className="mt-3 text-[26px] font-bold tracking-[-0.02em] text-fg md:text-[32px]">
-          <T ko="수상 · 자격 · 교육 · 활동" en="Awards, credentials, education & activity" />
-        </h2>
-        <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-body">
-          <T ko="항목을 누르면 상세 내용을 확인할 수 있습니다." en="Open any row to see more details." />
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2 text-[11px]">
-          <a href="#awards" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="수상·대회" en="Awards & competitions" /></a>
-          <a href="#credentials" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="자격·증서" en="Credentials" /></a>
-          <a href="#education" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="교육" en="Education" /></a>
-          <a href="#activity" className="chip transition-colors hover:border-border-2 hover:text-fg"><T ko="활동" en="Activity" /></a>
+    <section id="records" className="mt-10 border-t border-border pt-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="section-label">Resume</p>
+          <h2 className="mt-2 text-[24px] font-bold tracking-[-0.02em] text-fg md:text-[28px]">
+            <T ko="이력" en="Background" />
+          </h2>
+        </div>
+
+        <div className="flex gap-5 overflow-x-auto border-b border-border text-[13px]" role="tablist" aria-label="Portfolio records">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={active === tab.id}
+              onClick={() => setActive(tab.id)}
+              className={`relative shrink-0 pb-2 font-medium transition-colors ${
+                active === tab.id ? 'text-fg' : 'text-muted hover:text-body'
+              }`}
+            >
+              <T ko={tab.ko} en={tab.en} />
+              {active === tab.id && <span className="absolute inset-x-0 -bottom-px h-px bg-accent" />}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 xl:grid-cols-2">
-        <section id="awards" className="glass overflow-hidden scroll-mt-24">
-          <div className="border-b border-border px-4 py-3">
-            <p className="section-label">Awards & Competitions</p>
+      <div className="mt-4 overflow-hidden rounded-xl border border-border bg-surface/60">
+        {active === 'awards' && (
+          <div role="tabpanel">
+            {[...profile.awards]
+              .sort((a, b) => b.year - a.year)
+              .map((award) => (
+                <ExpandableRow
+                  key={`${award.year}-${award.title}`}
+                  period={String(award.year)}
+                  title={award.title}
+                  titleEn={award.titleEn}
+                  result={award.result}
+                  resultEn={award.resultEn}
+                  detail={award.detail}
+                  detailEn={award.detailEn}
+                />
+              ))}
           </div>
-          {awardYears.map((year) => {
-            const items = awards.filter((award) => award.year === year)
-            return (
-              <div key={year}>
-                <div className="border-b border-border bg-bg-2/55 px-4 py-3 text-[14px] font-semibold text-accent">
-                  {year}
-                </div>
-                {items.map((award) => (
-                  <RecordDetails
-                    key={`${award.year}-${award.title}`}
-                    title={award.title}
-                    titleEn={award.titleEn}
-                    meta={[award.result, award.detail].filter(Boolean).join(' · ')}
-                    metaEn={[award.resultEn, award.detailEn].filter(Boolean).join(' · ')}
-                  >
-                    <p className="font-medium text-fg"><T ko={award.result} en={award.resultEn} /></p>
-                    {award.detail && <p className="mt-1"><T ko={award.detail} en={award.detailEn ?? award.detail} /></p>}
-                  </RecordDetails>
-                ))}
-              </div>
-            )
-          })}
-        </section>
+        )}
 
-        <div className="grid content-start gap-4">
-          <section id="credentials" className="glass overflow-hidden scroll-mt-24">
-            <div className="border-b border-border px-4 py-3">
-              <p className="section-label">Credentials</p>
-            </div>
+        {active === 'credentials' && (
+          <div role="tabpanel">
             {credentials.map((credential) => (
-              <RecordDetails
+              <ExpandableRow
                 key={credential.title}
+                period={credentialPeriod(credential.title)}
                 title={credential.title}
                 titleEn={credential.titleEn}
-                meta={credential.detail}
-                metaEn={credential.detailEn}
-              >
-                <p><T ko={credential.detail} en={credential.detailEn} /></p>
-              </RecordDetails>
+                result={credential.detail}
+                resultEn={credential.detailEn}
+              />
             ))}
-          </section>
+          </div>
+        )}
 
-          <section id="education" className="glass overflow-hidden scroll-mt-24">
-            <div className="border-b border-border px-4 py-3">
-              <div>
-                <p className="section-label">Education</p>
-                <p className="mt-1 text-[11px] text-muted">
-                  <T ko="정보보호영재교육원 2023–2026 · 4년 연속" en="Information Security Gifted Education · 2023–2026, four consecutive years" />
-                </p>
-              </div>
-            </div>
+        {active === 'education' && (
+          <div role="tabpanel">
             {profile.education.map((item, index) => {
               const en = profile.educationEn[index]
               const degreeKo = educationDegree(item.org, item.period, item.degree, 'ko')
               const degreeEn = educationDegree(en.org, en.period, en.degree, 'en')
               return (
-                <RecordDetails
+                <ExpandableRow
                   key={`${item.org}-${item.period}`}
-                  title={item.org}
-                  titleEn={en.org}
-                  meta={`${degreeKo} · ${item.period}`}
-                  metaEn={`${degreeEn} · ${en.period}`}
-                >
-                  <p><T ko={degreeKo} en={degreeEn} /></p>
-                  <p className="mt-1 text-[12px] text-muted"><T ko={item.period} en={en.period} /></p>
-                </RecordDetails>
+                  period={item.period}
+                  title={`${item.org} — ${degreeKo}`}
+                  titleEn={`${en.org} — ${degreeEn}`}
+                />
               )
             })}
-          </section>
+          </div>
+        )}
 
-          <section id="activity" className="glass overflow-hidden scroll-mt-24">
-            <div className="border-b border-border px-4 py-3">
-              <p className="section-label">Selected Activity</p>
-            </div>
+        {active === 'activity' && (
+          <div role="tabpanel">
             {profile.publicActivities.map((activity) => (
-              <RecordDetails
+              <ExpandableRow
                 key={`${activity.year}-${activity.title}`}
-                title={`${activity.year} · ${activity.title}`}
-                titleEn={`${activity.year} · ${activity.titleEn}`}
-                meta={activity.source}
-                metaEn={activity.sourceEn}
-              >
-                <p><T ko={activity.detail} en={activity.detailEn} /></p>
-              </RecordDetails>
+                period={String(activity.year)}
+                title={activity.title}
+                titleEn={activity.titleEn}
+                result={activity.source}
+                resultEn={activity.sourceEn}
+                detail={activity.detail}
+                detailEn={activity.detailEn}
+              />
             ))}
-          </section>
-        </div>
+          </div>
+        )}
       </div>
     </section>
   )
