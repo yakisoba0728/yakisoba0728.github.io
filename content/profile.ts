@@ -57,27 +57,27 @@ export interface Profile {
 export const profile: Profile = {
   name: '김동혁',
   nameEn: 'Donghyeok Kim',
-  tagline: 'AI 에이전트로 만들고 싶은 걸 완성하는 에이전틱 엔지니어',
-  taglineEn: 'An agentic engineer who ships what you imagine — with AI agents',
-  lead: 'AI 에이전트와 함께, 아이디어를 빠르게 동작하는 제품으로 만듭니다.',
-  leadEn: 'I turn ideas into working products, fast — together with AI agents.',
-  roles: ['풀스택 개발자', 'AI 엔지니어', '에이전틱 엔지니어', '경북SW마이스터고 학생'],
-  rolesEn: ['Full-stack Developer', 'AI Engineer', 'Agentic Engineer', 'SW Meister H.S. Student'],
+  tagline: '아이디어를 실제로 동작하는 제품으로 만드는 엔지니어',
+  taglineEn: 'An engineer who turns ideas into working products',
+  lead: '웹부터 시스템·보안·인프라·AI까지, 아이디어를 직접 설계하고 실제로 동작하는 제품으로 완성합니다.',
+  leadEn: 'I design and build working products across web, systems, security, infrastructure, and AI.',
+  roles: ['풀스택 개발자', '시스템 엔지니어', '보안 연구자', 'AI 엔지니어', '경북SW마이스터고 학생'],
+  rolesEn: ['Full-stack Developer', 'Systems Engineer', 'Security Researcher', 'AI Engineer', 'SW Meister H.S. Student'],
   creedLines: ['변화를 따라가는 게 아니라,', '변화와 함께 성장하는 개발자'],
   creedLinesEn: ["I don't just keep up with change —", 'I grow with it.'],
   creedHighlight: ['변화', '성장'],
   creedHighlightEn: ['change', 'grow'],
   bioShort:
-    '바이브코딩을 넘어 AI 에이전트를 오케스트레이션하는 에이전틱 엔지니어예요. 익숙하지 않은 언어·스택도 명확한 스펙과 컨텍스트로 빠르게 완성합니다.',
+    '웹 서비스부터 시스템 소프트웨어, 보안·리버스 엔지니어링, AI까지 분야를 가리지 않고 필요한 기술을 직접 익혀 실제로 동작하는 제품을 만듭니다. 정보보호·CTF 대회에서도 여러 차례 수상하며 보안 문제를 깊게 파고드는 것을 좋아합니다.',
   bioShortEn:
-    'An agentic engineer who orchestrates AI agents beyond vibe coding. I ship working products fast — even in unfamiliar stacks — with clear specs and context.',
+    'I build working products across web, systems software, security, reverse engineering, and AI. I also enjoy digging deeply into security problems and have earned multiple awards in cybersecurity and CTF competitions.',
   bioLong: [
-    '바이브코딩을 넘어, AI 에이전트를 오케스트레이션해 제품을 만드는 에이전틱 엔지니어입니다. 경북소프트웨어마이스터고등학교에 재학 중이에요.',
-    '명확한 스펙과 컨텍스트를 설계해, 익숙하지 않은 언어·스택도 실제로 동작하는 제품으로 빠르게 완성합니다. 만들고 싶은 게 생기면 일단 만들어보는 편이에요.',
+    '아이디어가 생기면 직접 설계하고 구현해 실제로 동작하는 제품까지 완성하는 엔지니어입니다. 웹·백엔드뿐 아니라 시스템 소프트웨어, 인프라, AI 등 문제에 필요한 영역을 가리지 않고 파고듭니다.',
+    '보안과 리버스 엔지니어링에도 깊은 관심을 갖고 있으며, 정보보호·CTF 대회에서 여러 차례 수상했습니다. 단순히 기능을 만드는 데서 끝내지 않고 내부 동작을 이해하고 검증하며 안정적으로 운영할 수 있는 구조까지 고민합니다.',
   ],
   bioLongEn: [
-    'An agentic engineer who builds products by orchestrating AI agents, beyond vibe coding. Currently a student at Gyeongbuk Software Meister High School.',
-    'By designing clear specs and context, I quickly turn even unfamiliar languages and stacks into working products. When I want to build something, I just start building.',
+    'I am an engineer who takes an idea from design to implementation and turns it into a working product. I work across web and backend development, systems software, infrastructure, and AI whenever the problem calls for it.',
+    'I am also deeply interested in security and reverse engineering, and have earned multiple awards in cybersecurity and CTF competitions. I care not only about building features, but also about understanding how systems work, validating them, and designing them to operate reliably.',
   ],
   socials: {
     github: 'https://github.com/yakisoba0728',
@@ -86,6 +86,7 @@ export const profile: Profile = {
   },
   skills: [
     { category: 'Languages', items: ['Python', 'TypeScript', 'Node.js', 'Java'] },
+    { category: 'Security', items: ['Reverse Engineering', 'CTF', 'Binary Analysis', 'Ghidra'] },
     { category: 'AI / ML', items: ['PyTorch', 'Hugging Face', 'LangChain', 'Claude API', 'vLLM', 'Ollama'] },
     { category: 'Web', items: ['Next.js', 'React', 'FastAPI', 'Tailwind CSS'] },
     { category: 'Infra / Tools', items: ['PostgreSQL', 'pgvector', 'Docker', 'AWS', 'Vercel', 'Git'] },
@@ -101,11 +102,13 @@ export const profile: Profile = {
     'GBSW Platform — improving features and reliability of the school management platform',
   ],
   activities: [
+    { title: '정보보호·CTF 대회 다수 수상', period: '2023 — 현재' },
     { title: '교내 AI 해커톤 대상', org: '경북소프트웨어마이스터고', period: '2025' },
     { title: '오픈소스 컨트리뷰션 (LLM 생태계)', period: '2025 — 현재' },
     { title: '사이드 프로젝트 다수 기획·배포', period: '2024 — 현재' },
   ],
   activitiesEn: [
+    { title: 'Multiple awards in cybersecurity & CTF competitions', period: '2023 — Present' },
     { title: 'Grand Prize — In-school AI Hackathon', org: 'Gyeongbuk SW Meister H.S.', period: '2025' },
     { title: 'Open-source contributions (LLM ecosystem)', period: '2025 — Present' },
     { title: 'Shipped numerous side projects', period: '2024 — Present' },
