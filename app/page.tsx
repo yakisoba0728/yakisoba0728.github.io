@@ -9,7 +9,7 @@ import { getAllProjects } from '@/lib/content'
 
 export default function HomePage() {
   const skillCount = profile.skills.reduce((sum, g) => sum + g.items.length, 0)
-  const aiCount = profile.skills.find((g) => g.category === 'AI / ML')?.items.length ?? 0
+  const awardCount = profile.awards.length
   const projectCount = getAllProjects().length
 
   return (
@@ -20,7 +20,7 @@ export default function HomePage() {
         <Counters
           items={[
             { label: <T ko="다루는 기술 · 도구" en="Tools & tech" />, value: skillCount, suffix: '+' },
-            { label: <T ko="AI 모델 · 도구" en="AI models & tools" />, value: aiCount },
+            { label: <T ko="수상 · 대회 이력" en="Awards & competition records" />, value: awardCount },
             { label: <T ko="만든 프로젝트" en="Projects shipped" />, value: projectCount },
           ]}
         />
