@@ -1,9 +1,5 @@
-import { ViewTransition } from 'react'
+import PageEnter from '@/components/PageEnter'
 
 export default function Template({ children }: { children: React.ReactNode }) {
-  return (
-    <ViewTransition enter="page-enter" exit="page-exit">
-      {children}
-    </ViewTransition>
-  )
+  return <PageEnter>{children}</PageEnter>
 }
