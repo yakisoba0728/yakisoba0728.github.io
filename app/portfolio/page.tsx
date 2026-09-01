@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import Reveal from '@/components/Reveal'
 import ProjectCard from '@/components/ProjectCard'
-import PortfolioRecords from '@/components/portfolio/PortfolioRecords'
 import { getAllProjects } from '@/lib/content'
 import T from '@/components/T'
 import EmptyState from '@/components/EmptyState'
 
-export const metadata: Metadata = { title: '포트폴리오', description: '프로젝트와 수상·자격·교육 이력' }
+export const metadata: Metadata = { title: '포트폴리오', description: '프로젝트 모음' }
 
 export default function PortfolioPage() {
   const projects = getAllProjects()
@@ -19,7 +18,7 @@ export default function PortfolioPage() {
         <p className="section-label">Portfolio</p>
         <h1 className="t-display mt-4"><T ko={<>만든 <span className="gradient-text">것들</span></>} en={<>Things I&apos;ve <span className="gradient-text">built</span></>} /></h1>
         <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-body">
-          <T ko="직접 만든 프로젝트와 주요 수상·자격·교육 이력을 정리했습니다." en="Selected projects, awards, credentials, and education." />
+          <T ko="직접 개발한 프로젝트를 정리했습니다." en="Selected projects I have built." />
         </p>
       </Reveal>
 
@@ -48,8 +47,6 @@ export default function PortfolioPage() {
           </>
         )}
       </div>
-
-      <PortfolioRecords />
     </div>
   )
 }
