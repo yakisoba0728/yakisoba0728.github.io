@@ -38,6 +38,7 @@ export interface AwardItem {
   evidenceUrl?: string
 }
 export interface CredentialItem {
+  year: number
   title: string
   titleEn: string
   detail: string
@@ -47,6 +48,7 @@ export interface CredentialItem {
 }
 export interface PublicActivityItem {
   year: number
+  date?: string
   title: string
   titleEn: string
   detail: string
@@ -186,10 +188,21 @@ export const profile: Profile = {
       titleEn: 'CCE CTF',
       result: '본선 진출',
       resultEn: 'Finalist',
-      detail: 'OxB4DC0DE · 본선 예정',
-      detailEn: 'OxB4DC0DE · finals upcoming',
-      evidence: '본선 예정',
-      evidenceEn: 'Finals scheduled',
+      detail: 'OxB4DC0DE',
+      detailEn: 'OxB4DC0DE',
+      evidence: '본선 진출 이력',
+      evidenceEn: 'Finalist record',
+    },
+    {
+      year: 2026,
+      title: 'CCE 2026 CTF 청소년부',
+      titleEn: 'CCE 2026 CTF — Youth Division',
+      result: '전국 10위 · 유일 개인팀',
+      resultEn: '10th Nationwide · Only Solo Team',
+      detail: '다른 참가팀이 4인 팀으로 구성된 가운데 유일한 1인 팀으로 참가했습니다.',
+      detailEn: 'Competed as the only one-person team while the other participating teams were four-person teams.',
+      evidence: '대회 최종 순위',
+      evidenceEn: 'Final competition ranking',
     },
     {
       year: 2025,
@@ -292,6 +305,7 @@ export const profile: Profile = {
   ],
   credentials: [
     {
+      year: 2026,
       title: 'ITQ 정보기술자격',
       titleEn: 'ITQ Information Technology Qualification',
       detail: '아래한글 B · 한글파워포인트 A',
@@ -300,6 +314,7 @@ export const profile: Profile = {
       evidenceEn: 'Korea Productivity Center qualification record',
     },
     {
+      year: 2023,
       title: 'DIAT 디지털정보활용능력',
       titleEn: 'DIAT Digital Information Ability Test',
       detail: '고급 · 2023.03.03 취득',
@@ -308,6 +323,7 @@ export const profile: Profile = {
       evidenceEn: 'Nationally recognized physical certificate',
     },
     {
+      year: 2025,
       title: '정보보호영재교육원 수료증',
       titleEn: 'Gifted Education Center for Information Security Completion Certificate',
       detail: '2025 교육과정 수료',
@@ -316,6 +332,7 @@ export const profile: Profile = {
       evidenceEn: 'Physical completion certificate',
     },
     {
+      year: 2026,
       title: '경북SW마이스터고 입학성적 우수 장학증서',
       titleEn: 'Gyeongbuk SW Meister High School Admission Excellence Scholarship',
       detail: '2026학년도 입학성적 우수',
@@ -323,14 +340,68 @@ export const profile: Profile = {
       evidence: '실물 장학증서',
       evidenceEn: 'Physical scholarship certificate',
     },
+    {
+      year: 2026,
+      title: 'TOPCIT',
+      titleEn: 'TOPCIT',
+      detail: '수준 2',
+      detailEn: 'Level 2',
+      evidence: 'TOPCIT 성적 결과',
+      evidenceEn: 'TOPCIT score report',
+    },
   ],
   publicActivities: [
     {
+      year: 2026,
+      date: '2026.06.28',
+      title: "경북소프트웨어마이스터고 '대구·경북 사이버공격방어대회 2026' 최우수상·우수상 등 대거 수상",
+      titleEn: "Gyeongbuk Software Meister High School wins top awards at the 2026 Daegu·Gyeongbuk Cyber Attack Defense Competition",
+      detail: '청소년부 최우수상(OxB4DC0DE, 김동혁·이병수)과 수상 소감이 보도되었습니다.',
+      detailEn: 'Coverage of the Youth Division Top Excellence Award for OxB4DC0DE (Donghyeok Kim and Byeongsu Lee), including winner comments.',
+      source: '대구경북일보',
+      sourceEn: 'Daegu Gyeongbuk Ilbo',
+      url: 'http://dgn.kr/bbs/board.php?bo_table=news&wr_id=158590',
+    },
+    {
+      year: 2026,
+      date: '2026.04.01',
+      title: '피싱 잡던 AI도 시간 지나면 무력화…의성 SW고, 보안 패러다임 바꿨다',
+      titleEn: 'Even phishing-detection AI degrades over time — Uiseong SW students challenge the security paradigm',
+      detail: '피싱 탐지 모델의 시간 경과에 따른 정확도 하락과 청소년 국제학술 컨퍼런스 대상 수상 연구가 소개되었습니다.',
+      detailEn: 'Coverage of the award-winning research on time-dependent degradation in phishing-detection model accuracy.',
+      source: '경북일보',
+      sourceEn: 'Kyongbuk Ilbo',
+      url: 'https://www.kyongbuk.co.kr/news/articleView.html?idxno=4068789',
+    },
+    {
+      year: 2026,
+      date: '2026.03.30',
+      title: '경북소프트웨어마이스터고, 제2회 청소년 국제학술 컨퍼런스 대회 대상 수상',
+      titleEn: 'Gyeongbuk Software Meister High School wins Grand Prize at the 2nd Youth International Academic Conference',
+      detail: '제2회 청소년 국제학술 컨퍼런스 대상 수상 소식이 보도되었습니다.',
+      detailEn: 'Coverage of the Grand Prize at the 2nd Youth International Academic Conference.',
+      source: '다경뉴스',
+      sourceEn: 'DKIT News',
+      url: 'https://www.dkitnews.com/466679',
+    },
+    {
+      year: 2026,
+      date: '2026.03.28',
+      title: '피싱·흑돼지·로켓… "제주에 모인 청소년 연구자들, 이런 고민 했어요"',
+      titleEn: 'Phishing, black pork, rockets — the questions explored by young researchers gathered in Jeju',
+      detail: '제2회 청소년 국제학술 컨퍼런스 현장 기사에서 대상 수상 연구와 논문 내용이 소개되었습니다.',
+      detailEn: 'The conference feature introduced the Grand Prize-winning research and its paper.',
+      source: '미디어제주',
+      sourceEn: 'Media Jeju',
+      url: 'https://www.mediajeju.com/news/articleView.html?idxno=363513',
+    },
+    {
       year: 2024,
-      title: '딥페이크 피해학교 지도 직접 개발',
-      titleEn: 'Built a deepfake victim-school map',
-      detail: '딥페이크 피해 확산 상황을 한눈에 확인할 수 있는 지도를 직접 제작했고, 제작 사실과 취지가 언론에 보도되었습니다.',
-      detailEn: 'Built a map to visualize the spread of deepfake-related school incidents; the project and its purpose were covered by the press.',
+      date: '2024.09.18',
+      title: '"마음의 상처 빨리 치유되길 기원합니다"…\'딥페이크 맵\' 제작 나선 중학생',
+      titleEn: 'Middle school student builds a deepfake map hoping victims can heal quickly',
+      detail: '산자연중 2학년 당시 기존 딥페이크 맵이 먹통이 된 뒤 직접 피해학교 지도를 만든 과정이 인터뷰로 보도되었습니다.',
+      detailEn: 'An interview covering how I built a replacement deepfake victim-school map as a second-year middle school student after the existing map stopped working.',
       source: '경기신문',
       sourceEn: 'KG News',
       url: 'https://www.kgnews.co.kr/news/article.html?no=810032',
