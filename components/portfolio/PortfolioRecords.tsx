@@ -15,13 +15,6 @@ const tabs: { id: Tab; ko: string; en: string }[] = [
   { id: 'activity', ko: '활동', en: 'Activity' },
 ]
 
-const topcit = {
-  title: 'TOPCIT',
-  titleEn: 'TOPCIT',
-  detail: '보유 여부 및 점수 미확인',
-  detailEn: 'Possession and score not yet verified',
-}
-
 function ExpandableRow({
   period,
   title,
@@ -30,6 +23,7 @@ function ExpandableRow({
   resultEn,
   detail,
   detailEn,
+  url,
 }: {
   period: string
   title: string
@@ -38,6 +32,7 @@ function ExpandableRow({
   resultEn?: string
   detail?: string
   detailEn?: string
+  url?: string
 }) {
   const hasDetail = Boolean(detail || detailEn)
 
@@ -48,7 +43,18 @@ function ExpandableRow({
         <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <p className="text-[14px] font-semibold leading-snug text-fg"><T ko={title} en={titleEn} /></p>
           {result && (
-            <p className="shrink-0 text-[12px] font-medium text-muted"><T ko={result} en={resultEn ?? result} /></p>
+            url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="shrink-0 text-[12px] font-medium text-accent hover:underline"
+              >
+                <T ko={result} en={resultEn ?? result} />
+              </a>
+            ) : (
+              <p className="shrink-0 text-[12px] font-medium text-muted"><T ko={result} en={resultEn ?? result} /></p>
+            )
           )}
         </div>
       </div>
@@ -63,7 +69,19 @@ function ExpandableRow({
           <div className="min-w-0 flex-1 sm:flex sm:justify-between sm:gap-4">
             <p className="text-[14px] font-semibold leading-snug text-fg"><T ko={title} en={titleEn} /></p>
             {result && (
-              <p className="mt-1 shrink-0 text-[12px] font-medium text-muted sm:mt-0"><T ko={result} en={resultEn ?? result} /></p>
+              url ? (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  className="mt-1 shrink-0 text-[12px] font-medium text-accent hover:underline sm:mt-0"
+                >
+                  <T ko={result} en={resultEn ?? result} />
+                </a>
+              ) : (
+                <p className="mt-1 shrink-0 text-[12px] font-medium text-muted sm:mt-0"><T ko={result} en={resultEn ?? result} /></p>
+              )
             )}
           </div>
           <ChevronDown size={14} className="mt-0.5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" />
@@ -79,8 +97,8 @@ function ExpandableRow({
 export default function PortfolioRecords() {
   const [active, setActive] = useState<Tab>('awards')
 
-  const credentials = [
-    ...profile.credentials.map((credential) =>
+  const credentials = profile.credentials
+    .map((credential) =>
       credential.title.startsWith('DIAT')
         ? {
             ...credential,
@@ -88,17 +106,8 @@ export default function PortfolioRecords() {
             detailEn: `${credential.detailEn} · certificate no. DIAT-2023-008172`,
           }
         : credential,
-    ),
-    topcit,
-  ]
-
-  const credentialPeriod = (title: string) => {
-    if (title.startsWith('DIAT')) return '2023'
-    if (title.includes('정보보호영재교육원')) return '2025'
-    if (title.includes('입학성적')) return '2026'
-    if (title === 'TOPCIT') return '—'
-    return '—'
-  }
+    )
+    .sort((a, b) => b.year - a.year)
 
   return (
     <section id="records" className="mt-10 border-t border-border pt-8">
@@ -154,7 +163,7 @@ export default function PortfolioRecords() {
             {credentials.map((credential) => (
               <ExpandableRow
                 key={credential.title}
-                period={credentialPeriod(credential.title)}
+                period={String(credential.year)}
                 title={credential.title}
                 titleEn={credential.titleEn}
                 result={credential.detail}
@@ -187,13 +196,14 @@ export default function PortfolioRecords() {
             {profile.publicActivities.map((activity) => (
               <ExpandableRow
                 key={`${activity.year}-${activity.title}`}
-                period={String(activity.year)}
+                period={activity.date ?? String(activity.year)}
                 title={activity.title}
                 titleEn={activity.titleEn}
                 result={activity.source}
                 resultEn={activity.sourceEn}
                 detail={activity.detail}
                 detailEn={activity.detailEn}
+                url={activity.url}
               />
             ))}
           </div>
