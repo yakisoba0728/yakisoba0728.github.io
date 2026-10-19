@@ -5,10 +5,18 @@ import { useEffect, useState } from 'react'
 export default function LangToggle() {
   const [lang, setLang] = useState<'ko' | 'en'>('ko')
   useEffect(() => {
+    const onLangChange = (event: Event) => {
+      const next = (event as CustomEvent).detail
+      if (next === 'ko' || next === 'en') setLang(next)
+    }
+    window.addEventListener('langchange', onLangChange)
     const id = setTimeout(() => {
       setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'ko')
     }, 0)
-    return () => clearTimeout(id)
+    return () => {
+      clearTimeout(id)
+      window.removeEventListener('langchange', onLangChange)
+    }
   }, [])
   const toggle = () => {
     const next: 'ko' | 'en' = lang === 'ko' ? 'en' : 'ko'

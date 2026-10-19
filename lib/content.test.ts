@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parsePost, parseProject, byDateDesc, byOrderAsc, selectPublished } from './content'
+import { parsePost, parseProject, byDateDesc, byOrderAsc, selectPublished, getAllPosts, getPost } from './content'
 
 describe('parsePost', () => {
   it('프론트매터와 본문을 파싱한다', () => {
@@ -50,4 +50,9 @@ describe('comparators & filters', () => {
     ] as never[]
     expect(selectPublished(items)).toHaveLength(1)
   })
+})
+
+it.each(['hello-world', 'nextjs-app-router'])('샘플 글 %s를 목록과 상세에서 제외한다', (slug) => {
+  expect(getAllPosts().some((post) => post.slug === slug)).toBe(false)
+  expect(getPost(slug)).toBeNull()
 })

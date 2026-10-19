@@ -1,5 +1,7 @@
 # /preview 배너 리디자인 + 전역 버그 수정 — Implementation Plan
 
+> **현재 상태:** 구현 후 2026-06-09에 홈으로 통합되었습니다(`7413402`). `/preview` 경로는 제거되었으며 아래 체크박스는 당시 계획의 기록입니다.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** `yaki.kr/preview/`에 리디자인된 홈(워밍 그라데이션 배너 + 용암 마퀴 + 글래스 코드창)을 추가하고, 원본 `yaki.kr/`은 보존하며, 네비 레이아웃 흔들림과 네모 파비콘을 전역 수정한다.

@@ -20,7 +20,7 @@ const pretendard = localFont({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://yaki.kr'),
   title: { default: `${profile.name} — 포트폴리오`, template: `%s — ${profile.name}` },
   description: profile.tagline,
   openGraph: {

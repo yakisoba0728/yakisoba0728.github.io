@@ -14,7 +14,10 @@ export default function BackToTop() {
     <button
       className={`back-to-top${show ? ' show' : ''}`}
       aria-label="맨 위로"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      onClick={() => window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      })}
     >
       ↑
     </button>

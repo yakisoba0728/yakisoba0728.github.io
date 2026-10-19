@@ -1,6 +1,6 @@
 'use client'
 
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 
 type Props = React.HTMLAttributes<HTMLDivElement> & {
   stagger?: boolean
@@ -11,18 +11,13 @@ const PRELOAD_PX = 112
 
 export default function Reveal({ stagger = false, variant = 'up', className = '', children, ...rest }: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  // Keep SSR and the first paint visible. Only content that is genuinely below
-  // the fold is hidden after layout is known.
-  const [shown, setShown] = useState(true)
 
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setShown(true)
-      return
-    }
+    el.classList.add('in')
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let io: IntersectionObserver | null = null
     let raf = 0
@@ -37,7 +32,7 @@ export default function Reveal({ stagger = false, variant = 'up', className = ''
     const finish = () => {
       if (finished) return
       finished = true
-      setShown(true)
+      el.classList.add('in')
       io?.disconnect()
       cleanupPassiveChecks()
     }
@@ -60,12 +55,9 @@ export default function Reveal({ stagger = false, variant = 'up', className = ''
 
     // Above-the-fold content is never hidden. This also catches content whose
     // final layout moved upward during a route transition.
-    if (isNearViewport()) {
-      setShown(true)
-      return
-    }
+    if (isNearViewport()) return
 
-    setShown(false)
+    el.classList.remove('in')
 
     // IntersectionObserver is the primary path, while passive geometry checks
     // are an independent fallback for browser timing, bfcache, resize and route
@@ -113,7 +105,8 @@ export default function Reveal({ stagger = false, variant = 'up', className = ''
             ? 'rv-blur'
             : ''
 
-  const cls = [stagger ? 'stagger' : 'reveal', variantClass, shown ? 'in' : '', className]
+  // Keep SSR visible; the observer only hides content below the fold after layout.
+  const cls = [stagger ? 'stagger' : 'reveal', variantClass, 'in', className]
     .filter(Boolean)
     .join(' ')
 

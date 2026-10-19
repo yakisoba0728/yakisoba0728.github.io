@@ -9,7 +9,9 @@ import T from '@/components/T'
 export const dynamicParams = false
 
 export function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }))
+  const params = getAllPosts().map((p) => ({ slug: p.slug }))
+  // shortcut: Next.js 16 export rejects empty params; remove this 404 sentinel when supported.
+  return params.length > 0 ? params : [{ slug: '_empty' }]
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

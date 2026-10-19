@@ -1,6 +1,5 @@
 import Reveal from '@/components/Reveal'
 import { profile } from '@/content/profile'
-import { educationDegree } from '@/lib/education'
 import T from '@/components/T'
 
 export default function Timeline() {
@@ -44,15 +43,13 @@ export default function Timeline() {
         <Reveal stagger className="mt-4 overflow-hidden rounded-xl border border-border bg-surface/60">
           {profile.education.map((e, i) => {
             const en = profile.educationEn[i]
-            const degreeKo = educationDegree(e.org, e.period, e.degree, 'ko')
-            const degreeEn = educationDegree(en.org, en.period, en.degree, 'en')
             return (
               <div
                 key={`${e.org}-${e.period}`}
                 className="grid gap-1.5 border-b border-border px-4 py-3 last:border-b-0 sm:grid-cols-[120px_1fr] sm:gap-4 md:px-5"
               >
                 <div className="text-[13px] font-medium text-accent"><T ko={e.period} en={en.period} /></div>
-                <h3 className="text-[14px] font-semibold leading-snug text-fg"><T ko={`${e.org} — ${degreeKo}`} en={`${en.org} — ${degreeEn}`} /></h3>
+                <h3 className="text-[14px] font-semibold leading-snug text-fg"><T ko={`${e.org} — ${e.degree}`} en={`${en.org} — ${en.degree}`} /></h3>
               </div>
             )
           })}
