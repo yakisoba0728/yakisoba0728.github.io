@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -40,8 +40,20 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Build (static export)
-        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build and browser regression tests
+        id: e2e
+        run: npm run test:e2e
+
+      - name: Upload browser test diagnostics
+        if: failure() && steps.e2e.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-test-results
+          path: test-results/
+          retention-days: 7
 
       - name: Disable Jekyll processing
         run: touch ./out/.nojekyll
