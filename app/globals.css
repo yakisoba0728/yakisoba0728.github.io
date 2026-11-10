@@ -176,6 +176,13 @@ html[data-lang="en"] .t-ko { display: none; }
 .prose-ch { color: var(--color-body); line-height: 1.7; }
 .prose-ch h2, .prose-ch h3 { color: var(--color-fg); font-weight: 700; letter-spacing: -0.02em; margin-top: 1.6em; margin-bottom: .5em; }
 .prose-ch a { color: var(--color-accent); text-decoration: underline; }
+.prose-ch p, .prose-ch ul, .prose-ch ol { margin: .6em 0; }
+.prose-ch ul { list-style: disc; padding-left: 1.3em; }
+.prose-ch ol { list-style: decimal; padding-left: 1.5em; }
+.prose-ch li { margin: .3em 0; padding-left: .2em; }
+.prose-ch li > ul, .prose-ch li > ol { margin: .2em 0; }
+.prose-ch li::marker { color: var(--color-muted); }
+.prose-ch strong { color: var(--color-fg); font-weight: 600; }
 .prose-ch code { font-family: var(--font-mono); font-size: .9em; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 4px; padding: .1em .35em; }
 .prose-ch pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 18px 20px; overflow-x: auto; }
 .prose-ch pre code { background: none; border: 0; padding: 0; }
