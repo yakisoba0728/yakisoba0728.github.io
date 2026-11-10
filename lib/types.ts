@@ -13,7 +13,7 @@ export interface Post {
 }
 
 export type ProjectVisibility = 'public' | 'private' | 'mixed'
-export type ProjectStatus = 'ongoing' | 'released' | 'service' | 'completed' | 'prototype'
+export type ProjectStatus = 'ongoing' | 'released' | 'service' | 'completed' | 'prototype' | 'discontinued'
 
 export interface ProjectFrontmatter {
   title: string

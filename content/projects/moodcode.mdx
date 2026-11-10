@@ -1,0 +1,46 @@
+---
+title: Moodcode
+period: 2026.10
+role: 개인 프로젝트 · AI 코딩 에이전트 / 데스크톱 앱
+stack: [TypeScript, Node.js, Electron, React, SQLite, AI SDK]
+repo: https://github.com/yakisoba0728/Moodcode
+visibility: public
+status: prototype
+featured: false
+order: 7
+published: true
+---
+
+## 한 줄 소개
+자체 TypeScript 엔진 위에 만든 로컬 코딩 에이전트와 Electron 데스크톱 앱입니다. 구현에 앞서 공개 코딩 에이전트 19개의 구조를 비교 분석하고, 그 결과를 바탕으로 엔진을 처음부터 설계했습니다.
+
+## 아키텍처
+- `packages/contracts` — 버전이 붙은 command/event 타입과 입력 검증
+- `packages/engine` — 약 60개 모듈: provider, 도구, 권한, 저장소, MCP, LSP, 터미널(PTY), 하위 작업, 워크플로, 복구, 샌드박스
+- `apps/desktop` — Electron main, 엔진을 돌리는 utility process, preload bridge, React 화면
+- `apps/engine-harness` — GUI 없이 JSONL 입출력으로 엔진을 구동하는 하네스
+- `packages/windows-job` — Windows Job Object용 C++ 네이티브 애드온
+
+## 동작 흐름 — Build 모드 작업
+1. 사용자가 로컬 저장소를 열고 작업을 만듭니다.
+2. 요청이 화면 → preload bridge → main → utility process의 엔진으로 전달됩니다.
+3. 엔진이 turn loop를 돌리고, provider adapter는 한 turn의 모델 통신만 맡습니다.
+4. 모델이 파일 쓰기나 명령 실행을 요청하면 요청마다 사용자 승인을 받습니다.
+5. 명령은 별도 supervisor가 실행하므로 엔진이 죽어도 프로세스 그룹이 정리됩니다.
+6. 모든 단계는 SQLite 트랜잭션으로 기록되고 이벤트로 화면에 스트리밍됩니다.
+7. 사용자는 diff를 확인하고, 필요하면 fingerprint 검증을 거쳐 변경을 되돌립니다.
+
+## 핵심 기능
+- Plan/Build 모드, 요청별 승인, 변경 diff와 복원 미리보기
+- OpenAI·Anthropic·Google·Groq·Mistral·DeepSeek·xAI·OpenRouter 등 다중 provider
+- MCP, PTY 터미널, LSP, 하위·팀 작업, 워크플로, 실행 중 지시(queue/steer)
+- 기록 재생, 재시작 시 중단된 작업을 interrupted로 처리(도구 자동 재실행 금지)
+- API 키는 OS 보안 저장소(Electron safeStorage)로 암호화해 보관
+
+## 기술적 포인트
+- **테스트**: 테스트 파일 약 500개, README 기준 5,000개 이상 통과
+- **CI**: 엔진(Ubuntu·macOS), Windows 네이티브, 3개 OS 데스크톱 패키징, 릴리스 워크플로
+- 엔진을 GUI와 분리된 프로세스에서 돌리고 계약 패키지로 통신해 장애가 화면으로 번지지 않게 했습니다.
+
+## 현재
+개발용 빌드까지 완성한 프로토타입입니다. 정식 서명·배포 버전은 아직 없습니다.

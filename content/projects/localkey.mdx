@@ -1,0 +1,47 @@
+---
+title: localkey
+period: 2026.10
+role: 개인 프로젝트 · 보안 / Rust 시스템
+stack: [Rust, FIDO2, CTAP2, PC/SC, Linux UHID]
+repo: https://github.com/yakisoba0728/localkey
+visibility: public
+status: completed
+featured: false
+order: 8
+published: true
+---
+
+## 한 줄 소개
+FIDO2, OTP, 스마트카드 애플리케이션을 Rust로 처음부터 구현한 소프트웨어 보안키입니다. Linux 데몬 `localkeyd`로 실행하면 브라우저와 도구가 실물 보안키처럼 인식합니다.
+
+## 아키텍처
+- **결정론 엔진** — 스레드·시계·OS 호출이 없는 순수 로직 계층
+  - 기반: `lk-core`, `lk-crypto`(외부 암호 crate는 이곳에서만 사용)
+  - 프로토콜: CBOR·APDU 코덱, CTAPHID, CCID
+  - 애플릿: FIDO, OTP, OATH, PIV, OpenPGP, HSM Auth, Secure Channel(SCP03/11), 관리
+  - `lk-device::Device`가 애플릿 전체를 하나의 장치로 묶습니다.
+- **호스트 계층** — 원자적 저장소, 실행 스레드, 전송 4종(유닉스 소켓·UHID·USB gadget·PC/SC), 데몬 `localkeyd`
+
+## 동작 흐름 — 브라우저에서 WebAuthn 등록
+1. `localkeyd run`이 `/dev/uhid`에 FIDO HID 장치를 노출합니다.
+2. 브라우저가 보낸 CTAPHID 리포트를 UHID 계층이 받아 실행 스레드로 넘깁니다.
+3. `Device`가 패킷을 조립해 FIDO 애플릿(CTAP 2.1 `makeCredential`)으로 보냅니다.
+4. 사용자 존재 확인은 데스크톱 터치 창이나 `ctl tap` 명령으로 받습니다.
+5. 자격증명을 AES-256-GCM으로 봉인해 원자적으로 저장합니다.
+6. 응답을 CTAPHID로 브라우저에 돌려줍니다.
+
+## 핵심 기능
+- CTAP 2.1 전체 명령, PIN/UV 프로토콜 1·2, U2F
+- OpenPGP 카드 3.4, PIV(SP 800-73-4), OATH(TOTP/HOTP), OTP 슬롯
+- YubiHSM Auth, SCP03/SCP11 보안 채널
+- Linux 데스크톱 통합: 터치 UI, polkit 도우미, 설치·업그레이드 도구
+
+## 기술적 포인트
+- **안전성**: 전체 workspace `unsafe_code = "forbid"`, 프로그램 crate는 표준 라이브러리만 사용
+- **테스트**: `cargo test` 1,700여 개 통과
+- **실기기 비교**: 실물 보안키와 같은 읽기 요청을 보내 응답을 비교·측정
+- **VM 검증**: Debian 13·Ubuntu(GNOME/Wayland)의 aarch64·x86_64에서 Chromium·Firefox 등록과 로그인, 재부팅 후 유지까지 검증
+- **CI**: x86_64·aarch64 Linux 빌드, 태그 릴리스에 provenance attestation
+
+## 현재
+엔진 구현을 마쳤습니다. 공개 바이너리는 USB 제품 ID(pid.codes) 배정을 받은 뒤 배포할 예정입니다.

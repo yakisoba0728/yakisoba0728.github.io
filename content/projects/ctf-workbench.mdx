@@ -1,0 +1,36 @@
+---
+title: CTF Workbench
+period: 2026.10
+role: 개인 프로젝트 · 보안 / 개발 환경
+stack: [Docker, PowerShell, Python, Ghidra, pwntools, SageMath]
+visibility: private
+status: completed
+featured: false
+order: 13
+published: true
+---
+
+## 한 줄 소개
+amd64·arm64 이미지를 Dockerfile 하나로 만들고, Windows·macOS·Linux에서 같은 명령으로 문제 단위 분석·실행·기록을 할 수 있게 표준화한 CTF 분석 환경입니다.
+
+## 아키텍처
+- **통합 이미지** — Ubuntu 24.04(digest 고정) 기반 멀티스테이지 빌드: Ghidra, pwntools, angr, z3, SageMath, volatility3, John the Ripper 등
+- **호스트 실행기** — PowerShell 7 스크립트(`ctf.ps1`, `fetch.ps1`)와 bash·Make 래퍼
+- **문제 격리** — 문제 폴더 하나만 컨테이너 `/workspace`에 연결하고 배포 파일은 읽기 전용으로 마운트
+- **기록 도구** — 수집 이력, ZIP 무결성 검사, 원자적 압축 해제, 통신 로그
+
+## 동작 흐름
+1. `setup` 단계에서 이미지를 빌드하고, 네트워크를 끊은 상태로 도구를 검사한 뒤 이미지 ID와 입력 해시를 기록합니다.
+2. 대회 직전 `ready-all`로 이미지가 검증 당시와 같은지 다시 확인합니다.
+3. `fetch.ps1`이 CTFd·Dreamhack API로 문제를 받아 문제별 폴더와 메타데이터를 만듭니다.
+4. `ctf.ps1 run`이 풀이 스크립트를 제한 시간 안에서 실행하고 종료 코드와 로그를 바이트 그대로 남깁니다.
+5. 공지·첨부 변경은 ETag와 SHA-256으로 감지하고, 기존 원본은 덮어쓰지 않습니다.
+
+## 기술적 포인트
+- 외부 플랫폼 데이터는 신뢰하지 않고 경로·파일명을 검증
+- 제출 간격 준수와 중복 제출 방지
+- **CI**: Ubuntu·Windows에서 모의 CTFd 서버로 수집·감시 회귀 테스트와 경로 안전성 검사
+- ARM64 환경에서 QEMU 원격 디버깅까지 검증
+
+## 현재
+도구 구성과 실행기를 완성했습니다. 저장소는 비공개로 관리합니다.

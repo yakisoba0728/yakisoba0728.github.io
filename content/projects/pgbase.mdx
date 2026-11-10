@@ -1,0 +1,47 @@
+---
+title: PgBase
+period: 2026.08 – 현재
+role: 개인 프로젝트 · Go 백엔드 / BaaS
+stack: [Go, PostgreSQL, pgx, React, TypeScript, Docker]
+repo: https://github.com/yakisoba0728/PgBase
+visibility: public
+status: released
+featured: false
+order: 4
+published: true
+---
+
+## 한 줄 소개
+PocketBase에서 영감을 받아 PostgreSQL 위에 새로 만든 BaaS(Backend as a Service)입니다. 관리자 UI가 내장된 단일 Go 서버로 바로 시작할 수 있고, 같은 데이터베이스를 공유하는 여러 인스턴스로 확장할 수 있도록 설계했습니다.
+
+## 아키텍처
+- `cmd/pgbase` — 서버 진입점
+- `pgbase/` — 앱 조립, lifecycle hook, 백업 스케줄, 커스텀 라우트
+- `internal/` — 40여 개 패키지: 라우터(`api`), 레코드 연산(`recordops`), PocketBase식 접근 규칙 파서(`accessrule`), 스키마·마이그레이션, 실시간(`realtime`), 파일 저장소(로컬/S3), JS 확장(`jsvm`), 인증, 백업, 자체 업데이트, 관측성
+- `ui/admin` — React·Vite 기반 관리자 콘솔
+- `sdk/` — TypeScript·JavaScript·Dart 클라이언트 SDK
+
+## 동작 흐름 — 레코드 생성부터 실시간 전파까지
+1. 클라이언트가 SDK로 `POST /api/v1/collections/{collection}/records`를 호출합니다.
+2. 라우터가 인증과 rate limit을 거친 뒤 `recordops`로 넘깁니다.
+3. `accessrule`이 컬렉션별 규칙으로 권한을 평가하고 필드를 검증합니다.
+4. 레코드와 실시간 이벤트(outbox 행)를 **같은 PostgreSQL 트랜잭션**에 기록합니다.
+5. 실시간 서비스가 advisory lock으로 outbox 이벤트를 lease/claim해 구독자에게 전달합니다.
+6. 인스턴스가 죽어 lease가 만료되면 다른 인스턴스가 이벤트를 회수해 이어서 전달합니다.
+
+## 핵심 기능
+- 스키마 계획·적용, 타입이 있는 레코드와 관계, 뷰 가져오기
+- OAuth·OTP·MFA 인증과 레코드 단위 접근 규칙
+- 로컬/S3 파일 저장, byte range 응답, 이미지 썸네일
+- transactional outbox 기반 실시간 이벤트
+- 신뢰된 JS 확장(goja + esbuild), opt-in SQL 콘솔
+- 백업·복원, 크론 잡, 요청 로그, 자체 업데이트
+
+## 기술적 포인트
+- **테스트**: Go 테스트 함수 약 2,000개, 관리자 UI 테스트, e2e·백업 복원·SDK 인수 테스트
+- **CI 8종**: 백엔드·프론트·e2e·정기 백업 복원 검증·보안 검사·릴리스 게이트·이미지 빌드
+- **공급망 보안**: cosign 서명, SPDX SBOM, provenance attestation, Trivy·govulncheck 검사
+- 릴리스 게이트를 통과하지 못한 버전은 승격하지 않는 방식으로 v0.2.3까지 릴리스했습니다.
+
+## 현재
+v0.x 초기 단계로 API 계약을 다듬으면서 기능과 안정성을 넓히고 있습니다.

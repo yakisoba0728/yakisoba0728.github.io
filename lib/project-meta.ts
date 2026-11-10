@@ -21,6 +21,8 @@ export const statusLabel = (status: ProjectStatus): { ko: string; en: string } =
       return { ko: '운영 중', en: 'Live Service' }
     case 'prototype':
       return { ko: '프로토타입', en: 'Prototype' }
+    case 'discontinued':
+      return { ko: '종료', en: 'Discontinued' }
     default:
       return { ko: '완료', en: 'Completed' }
   }

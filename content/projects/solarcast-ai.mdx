@@ -1,17 +1,35 @@
 ---
 title: SolarCast AI
-period: 2026.06
-role: 개인 프로젝트 · Machine Learning
-stack: [Python, LightGBM, scikit-learn, Streamlit]
+period: 2026.07
+role: 기술연수 프로젝트 · Machine Learning
+stack: [Python, LightGBM, scikit-learn, pandas, Streamlit]
 repo: https://github.com/yakisoba0728/sunergy-ai
 visibility: public
 status: completed
 featured: false
-order: 10
+order: 15
 published: true
 ---
 
 ## 한 줄 소개
-날씨·시간·지역·설비용량을 이용해 지역별 시간당 태양광 발전량을 예측하는 머신러닝 프로젝트입니다.
+날씨·시간·지역·설비용량으로 한국 지역별 시간당 태양광 발전량을 예측하는 머신러닝 프로젝트입니다. 설비용량 대비 이용률을 먼저 예측한 뒤 발전량으로 환산합니다.
 
-설비용량으로 정규화한 utilization을 먼저 예측한 뒤 발전량으로 환산하는 방식과 발전량 직접 예측을 비교했습니다. LightGBM 기반 모델에서 발전량 기준 R² 약 0.95를 기록했습니다.
+## 파이프라인
+`load_data` → `preprocess` → `features` → `train` → `evaluate` → `predict` 모듈이 순서대로 이어지고, 학습한 모델 번들을 Streamlit 데모가 불러옵니다.
+
+## 동작 흐름
+1. 여러 기관의 CSV를 인코딩(utf-8·cp949·euc-kr)을 자동 판별해 읽습니다.
+2. 컬럼 이름과 지역명을 표준화하고, 태양광 데이터만 남기고, 중복·음수 값을 정리합니다.
+3. `이용률 = 발전량 / 설비용량`을 만들고 태양 고도각, 대기권 밖 일사량 같은 특징을 계산합니다.
+4. 시각 단위로 70/15/15 시계열 분할을 해서 같은 시각의 데이터가 학습·평가에 섞이지 않게 합니다.
+5. 검증셋으로 하이퍼파라미터를 고르고, 테스트셋은 마지막에 한 번만 평가합니다.
+6. 예측한 이용률에 설비용량을 곱해 발전량을 계산합니다.
+
+## 결과
+- 이용률 경로: 발전량 기준 R² 약 0.95, MAE 14.05
+- 발전량 직접 예측: R² 약 0.12
+- 야간의 0에 가까운 값 때문에 왜곡되는 MAPE 대신 nMAE와 정확률(설비용량 ±5% 이내 비율)을 주요 지표로 썼습니다.
+
+## 기술적 포인트
+- 지역별·시간대별 오차 리포트, 선형 베이스라인 비교
+- 테스트 57개

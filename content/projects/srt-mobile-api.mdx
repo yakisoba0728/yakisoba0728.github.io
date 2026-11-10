@@ -1,17 +1,42 @@
 ---
 title: srt-mobile-api
-period: 2026.07
+period: 2026.07 – 2026.09
 role: 개인 프로젝트 · Reverse Engineering / Python SDK
-stack: [Python, httpx, MkDocs]
+stack: [Python, httpx, pytest, pyright, MkDocs]
 repo: https://github.com/yakisoba0728/srt-mobile-api
+demo: https://yaki.kr/srt-mobile-api/
 visibility: public
-status: released
+status: completed
 featured: false
-order: 8
+order: 18
 published: true
 ---
 
 ## 한 줄 소개
-SRT 앱이 사용하는 HTTP API를 역공학해 Python 클라이언트로 구현한 프로젝트입니다.
+SRT 앱이 사용하는 HTTP API를 분석해 타입이 완비된 Python 클라이언트로 구현한 프로젝트입니다. 런타임 의존성은 `httpx` 하나입니다.
 
-열차·운임·좌석배치도·예약·승차권 조회와 예약·취소·결제·환불을 지원하며, 상태를 바꾸는 동작은 consent 객체와 dry-run 안전장치를 거칩니다.
+## 구조
+- `SrtClient` — 조회·예약·결제 기능의 단일 진입점
+- `session` · `http` — 로그인 세션과 전송 계층
+- `payloads` → `parsers` → `models` — 요청 폼 생성, 응답 파싱, 데이터 모델
+- `safety` · `consent` · `redaction` — 상태 변경 보호와 민감 정보 가림
+
+## 동작 흐름 — 상태를 바꾸는 요청
+1. 예약·취소·결제·환불 메서드는 키워드 전용 `consent: MutationConsent`를 요구하며, 없거나 범주가 맞지 않으면 예외를 냅니다.
+2. 범주(예약, 취소, 결제, 환불)를 하나씩 허용해야 합니다.
+3. 기본값 `dry_run=True`에서는 실제로 전송하지 않고, 민감 값을 가린 미리보기만 돌려줍니다.
+4. 환경 변수로 허용한 범주만 실제로 전송합니다.
+5. 조회 경로는 허용 목록 밖의 요청을 구조적으로 거절합니다.
+
+## 핵심 기능
+- 직통·환승·단체·할인 조회, 운임, 정차역, 좌석배치도
+- 예약(예약대기, 왕복, 좌석 지정), 취소, 카드 결제, 환불
+- 결제 시 카드 종류를 이중으로 확인하고, 이중 예약을 막기 위해 예약 요청은 재시도하지 않음
+- 각 메서드 문서에 구현 근거(앱 분석 위치 또는 실제 응답)를 표기
+
+## 기술적 포인트
+- **테스트**: 오프라인 테스트 1,700여 개, 실서버 테스트는 명시적으로 켰을 때만 실행
+- **CI**: ruff, pyright, OS × Python 버전 매트릭스 pytest, 문서 사이트 자동 배포
+
+## 현재
+v1.1.1을 마지막으로 개발을 마치고 저장소를 보관(archive) 처리했습니다.

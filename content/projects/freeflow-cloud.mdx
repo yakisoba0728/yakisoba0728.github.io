@@ -2,16 +2,43 @@
 title: Freeflow Cloud
 period: 2026.06
 role: 개인 프로젝트 · GPU Cloud Control Plane
-stack: [NestJS, k3s, HAMi, PostgreSQL]
+stack: [NestJS, TypeScript, Prisma, PostgreSQL, k3s, HAMi, Traefik]
 repo: https://github.com/yakisoba0728/freeflow-cloud
 visibility: public
 status: prototype
 featured: false
-order: 5
+order: 11
 published: true
 ---
 
 ## 한 줄 소개
-한 장의 고가 GPU를 여러 사용자가 안전하게 나눠 쓸 수 있도록 자동으로 작업공간을 만들고 회수하는 GPU 대여 플랫폼입니다.
+고가 GPU 한 장을 메모리 단위로 나눠 사용자별 격리 샌드박스로 빌려주는 GPU 대여 플랫폼의 컨트롤 플레인입니다. k3s와 HAMi 위에서 동작합니다.
 
-k3s + HAMi 환경에서 GPU 메모리를 분할하고, 사용자별 샌드박스 생성·정지·재개·삭제, PVC 영속화, 웹/SSH 접속, 동적 GPU 인벤토리를 제공합니다. 실제 H100에서 GPU 메모리 분할을 검증했습니다.
+## 아키텍처
+- **컨트롤 플레인(NestJS)** — 인증, GPU 인벤토리, 샌드박스, reconciler, 게이트웨이, SSH 모듈
+- **원하는 상태 저장소** — PostgreSQL(Prisma)
+- **Kubernetes 어댑터** — 샌드박스마다 Pod, PVC, Service, Traefik IngressRoute 생성
+- **SSH 게이트웨이** — 외부 SSH 접속을 컨테이너 셸로 연결
+
+## 동작 흐름
+1. 사용자가 로그인해 JWT를 받습니다.
+2. 이미지, GPU 메모리(MiB), GPU 코어 비율, CPU·메모리를 지정해 샌드박스 생성을 요청합니다.
+3. 원하는 상태가 Running으로 저장됩니다.
+4. reconciler가 주기적으로 실제 클러스터 상태와 비교해 리소스를 만듭니다(Pending → Provisioning → Running).
+5. 사용자는 토큰 URL로 웹에 접속하거나 등록한 공개키로 SSH 접속합니다.
+6. 정지하면 Pod를 지워 GPU를 즉시 반납하고, PVC는 남겨 재개할 때 다시 연결합니다.
+
+## 핵심 기능
+- JWT 인증, 관리자·사용자 역할, SSH 공개키 등록
+- HAMi 메트릭 기반 동적 GPU 인벤토리
+- GPU 메모리 하드 분할
+- 샌드박스 생성·정지·재개·삭제, 사용자별 영속 볼륨
+- 이미지 레지스트리 허용 목록과 digest 고정
+
+## 기술적 포인트
+- **실기 검증**: 실제 H100에서 GPU 메모리 분할이 하드 격리로 동작함을 확인. 코어 비율은 소프트 공유임을 문서화
+- **보안**: PodSecurity baseline, 사용자당 실행 샌드박스 1개 제한, 필수 비밀값이 없으면 기동 중단
+- **테스트**: 210여 개
+
+## 현재
+핵심 기능만 남긴 베이스라인을 완성했고, 팀 쿼터·유휴 회수 등은 재설계를 위해 걷어 낸 상태입니다.

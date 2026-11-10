@@ -2,16 +2,33 @@
 title: GBDAQ · 지비닥
 period: 2026.06
 role: 개인 프로젝트 · Prediction Market Demo
-stack: [Next.js, TypeScript, LMSR, React]
+stack: [Next.js, TypeScript, React, Framer Motion, LMSR]
 repo: https://github.com/yakisoba0728/gbdaq
+demo: https://gbdaq.vercel.app
 visibility: public
 status: completed
 featured: false
-order: 12
+order: 17
 published: true
 ---
 
 ## 한 줄 소개
-학교 안의 사건을 예/아니오로 예측하고 가격을 확률처럼 움직이게 만든 Polymarket 스타일의 플레이머니 예측시장 데모입니다.
+학교 안의 사건에 예/아니오로 거래하고 가격이 확률처럼 움직이는 Polymarket 스타일의 플레이머니 예측시장 데모입니다. 서버 없이 브라우저 localStorage만으로 동작합니다.
 
-LMSR 가격 엔진, 라이브 차트, 거래, 랭킹, 포트폴리오, AI 분석 패널을 구현했습니다. 서버 없이 localStorage만으로도 동작하는 데모 모드를 제공합니다.
+## 아키텍처
+- **상태 저장소** — 클라이언트 `DemoProvider`가 시장·지갑·거래 내역을 localStorage에 저장
+- **가격 엔진** — LMSR 순수 함수 모음(`lib/lmsr.ts`)
+- **분석 API** — 휴리스틱 기반 시장 전망 하나
+- **페이지** — 홈, 시장 상세, 리더보드, 포트폴리오
+
+## 동작 흐름
+1. 시장 8개, 데모 사용자, 시작 잔액으로 초기화합니다.
+2. 4초마다 시장 가격이 무작위로 움직이고 차트 기록이 쌓입니다.
+3. 매수·매도하면 LMSR로 받을 지분, 비용, 거래 후 가격을 계산합니다(예/아니오 가격의 합은 항상 1).
+4. 페이지마다 분석 API를 한 번 호출해 전망·신뢰도·근거와 “오늘의 픽”을 보여 주고, 실패하면 클라이언트 계산으로 대신합니다.
+5. 리더보드와 지갑에 평가액과 거래 내역이 반영됩니다.
+
+## 기술적 포인트
+- 정수 단위 경제로 부동소수점 오차가 잔액에 쌓이지 않게 설계
+- 처음에는 실제 LLM 애널리스트(강제 tool-use, 입력 제한, rate limit)를 붙였다가, 외부 모델 호출 없이 동작하는 휴리스틱 분석으로 바꿨습니다.
+- LMSR·분석·rate limit 단위 테스트

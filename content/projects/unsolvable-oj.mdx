@@ -1,0 +1,50 @@
+---
+title: 못풀준 · UnsolvableOJ
+period: 2026.09 – 현재
+role: 팀 프로젝트(4인) · 백엔드 / 채점 시스템
+stack: [NestJS, TypeScript, PostgreSQL, Redis, BullMQ, React, go-judge, Docker]
+repo: https://github.com/yakisoba0728/UnsolvableOJ
+demo: https://judge.yaki.kr
+visibility: public
+status: service
+featured: false
+order: 5
+published: true
+---
+
+## 한 줄 소개
+문제 출제, 코드 제출, 격리 채점을 제공하는 온라인 저지입니다. 기업 코딩 테스트, 커뮤니티, XP·랭킹 기능을 함께 갖추고 있으며 [judge.yaki.kr](https://judge.yaki.kr)에서 운영 중입니다.
+
+## 담당
+4인 팀에서 커밋의 약 3분의 2를 맡았습니다. 백엔드 API, 채점 워커, CI·배포를 주로 담당하고 프론트엔드 작업에도 참여했습니다.
+
+## 아키텍처
+- **Front** — React·Vite, nginx로 제공
+- **Back** — NestJS API: 인증, 문제, 제출, 기업 테스트, 커뮤니티, 미션, 알림, 관리자 모듈
+- **Judge** — BullMQ 워커와 go-judge 샌드박스
+- **데이터** — PostgreSQL(영속 데이터), Redis(큐·rate limit)
+- **배포** — Docker Compose, Cloudflare → Traefik → 서비스
+
+## 동작 흐름 — 제출부터 채점 결과까지
+1. 사용자가 코드를 제출하면 Back이 DB에 저장하고 BullMQ 큐에 넣습니다.
+2. 워커는 샌드박스 자가 점검과 API heartbeat가 통과한 뒤에만 큐를 소비합니다.
+3. 워커가 제출을 60초 lease로 claim합니다. 시도마다 generation을 붙여 중복 처리를 막습니다.
+4. go-judge에서 컴파일(시간·메모리 제한)한 뒤, 공개 예제부터 테스트를 순서대로 실행하고 첫 실패에서 멈춥니다.
+5. 결과를 API에 보고하고 실행 중에는 10초마다 heartbeat를 보냅니다.
+6. 장애가 나면 다음 generation으로 재큐잉하고, 5회를 넘으면 시스템 오류로 종료합니다.
+7. 화면은 결과를 폴링해 보여 주고, 첫 정답이면 XP를 지급합니다.
+
+## 핵심 기능
+- C17·C++20·Java 21·Python 3·JavaScript·TypeScript·Go·Rust 8개 언어 채점
+- 문제 출제, 관리자 검수, 버전 보존, 대량 재채점
+- 기업 테스트: 응시 링크, 응시자별 점수·코드 열람
+- XP·레벨·랭킹·미션·배지, 커뮤니티(글·답변·추천·팔로우·신고)
+- 관리자 콘솔: 역할, 정지, 감사 로그, 운영 상태
+
+## 기술적 포인트
+- **격리**: seccomp, cgroup(cpu·memory·pids) 제한, swap 금지 검증, 출력 크기 hard limit, 테스트마다 실행 환경 초기화
+- **비공개 테스트 보호**: 숨김 테스트의 출력은 응답에서 제외
+- **CI**: 린트·타입 검사·단위/통합 테스트, Chromium 회귀 테스트, 이미지 4종 빌드, 채점기 언어·격리 회귀 테스트, 의존성 감사
+
+## 현재
+MVP를 운영하면서 기능과 안정성을 계속 개선하고 있습니다.

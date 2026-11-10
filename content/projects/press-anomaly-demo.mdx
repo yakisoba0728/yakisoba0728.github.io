@@ -2,15 +2,37 @@
 title: Press Anomaly Demo
 period: 2026.05
 role: 대회/부스 프로젝트 · Industrial AI
-stack: [PyTorch, ONNX, Next.js, TypeScript]
+stack: [PyTorch, ONNX Runtime, Next.js, TypeScript, Three.js, socket.io]
 visibility: private
 status: completed
 featured: false
-order: 9
+order: 14
 published: true
 ---
 
 ## 한 줄 소개
-산업용 프레스 설비의 진동·온도 신호를 이용해 이상 징후를 조기에 감지하는 시연 시스템입니다.
+실제 프레스나 센서 없이 시뮬레이션 신호로 산업용 프레스의 진동·온도 이상을 조기에 감지하는 과정을 보여 주는 전시 부스용 시연 시스템입니다.
 
-4Hz FFT와 베어링 도메인 특징, RMS, 온도 데이터를 사용하고 1D Conv Autoencoder를 PyTorch로 학습한 뒤 ONNX Runtime으로 서비스합니다. 부스 시연용 대시보드와 제어 화면까지 함께 구현했습니다.
+## 아키텍처
+- **신호 엔진** — TypeScript 패키지(`signal-core`)로 진동·온도 신호를 합성. 학습 데이터도 이 패키지가 만들어 신호 정의를 한곳에서 관리
+- **시뮬레이션 워커** — Node Worker Thread에서 신호 생성, 특징 추출, 판정 수행
+- **서버** — Next.js 커스텀 서버와 socket.io
+- **화면** — 3D 프레스 뷰, 대시보드, 판정 근거 화면을 키오스크 창 3개로 띄우고, 시연자 제어 화면은 부스 내부망에서만 접근
+
+## 동작 흐름
+1. 워커가 30Hz로 신호를 합성합니다. 자동 시나리오는 정상 → 경고 → 위험 순으로 순환합니다.
+2. 4Hz로 1024포인트 FFT를 돌려 베어링 결함 주파수, RMS, 온도 특징을 뽑습니다.
+3. 규칙 기반 판정과 오토인코더 재구성 오차 판정을 함께 실행합니다.
+4. 결과를 압축해 실시간으로 화면에 보내면, 3D 뷰·스펙트럼·판단 근거가 함께 갱신됩니다.
+5. 시연자는 제어 화면에서 상태를 강제로 바꿔 특정 상황을 보여 줄 수 있습니다.
+
+## 핵심 기능
+- 3D 프레스 모델과 센서 핫스팟
+- FFT 스펙트럼 위에 AI 재구성 오차 오버레이
+- 규칙과 AI의 이중 판정, 두 판정이 다를 때 안내
+- 시연자 제어(시나리오 조작, 강제 전환), 소리 피드백
+
+## 기술적 포인트
+- **모델**: 정상 데이터만으로 학습한 비지도 1D Conv Autoencoder(PyTorch) → ONNX로 변환해 Node에서 추론
+- **임계치**: 평균+표준편차 방식과 백분위 방식 두 가지
+- **검증**: Python과 Node 추론 결과 동등성 테스트, 장시간 구동(soak) 측정, E2E 시나리오

@@ -2,7 +2,7 @@
 title: VALORANT Replay Intelligence
 period: 2026.07 – 현재
 role: 개인 프로젝트 · Replay Parsing / Analytics
-stack: [Rust, Python, Next.js, PostgreSQL]
+stack: [Rust, Python, Parquet, NestJS, Next.js, PostgreSQL, Redis]
 repo: https://github.com/yakisoba0728/vrfkit
 visibility: mixed
 status: ongoing
@@ -12,13 +12,35 @@ published: true
 ---
 
 ## 한 줄 소개
-VALORANT의 `.vrf` 리플레이를 직접 파싱하고, 그 데이터로 경기 분석 리포트를 만드는 전체 파이프라인입니다.
+VALORANT의 `.vrf` 리플레이를 손실 없이 Parquet로 내보내는 Rust 툴킷 **vrfkit**과, 그 데이터로 경기 분석 리포트를 만드는 웹 서비스 **valplay**로 이루어진 파이프라인입니다.
 
 ## vrfkit — 공개
-Rust로 Unreal Engine network replay 형식을 파싱해 `fields`, `movement`, `actors`, `events` 등 여러 Parquet 테이블과 manifest를 내보냅니다. 알 수 없는 필드도 raw bits를 보존해 이후 해석할 수 있도록 설계했습니다.
+[michel-giehl/ValorantReplayParser](https://github.com/michel-giehl/ValorantReplayParser)(MIT)에서 출발해, 10개 crate로 나뉜 Rust workspace로 다시 설계했습니다. 외부 기여자도 새 게임 빌드 지원에 참여했습니다.
+
+**crate 구성**
+`vrf-bitio`(비트 리더) → `vrf-container`(헤더·청크·Oodle 압축 해제) → `vrf-frame` → `vrf-transform`(빌드별 변환) → `vrf-net`(packet·bunch) → `vrf-schema`(필드 스키마·GUID 캐시) → `vrf-decode` / `vrf-movement` → `vrf-export`(Parquet) → `vrfkit` CLI
+
+**동작 흐름**
+1. `.vrf` 컨테이너를 열고 Oodle 압축을 풉니다.
+2. 게임 빌드에 맞는 변환을 적용합니다. 등록되지 않은 빌드는 명시적으로 거부합니다.
+3. Unreal 복제 스트림을 리플레이에 들어 있는 스키마로 디코드합니다.
+4. 타입을 아는 값은 해석해 얹고, 모르는 값은 raw bits로 보존합니다.
+5. `fields`, `movement`, `actors`, `events` 등 Parquet 테이블과 manifest를 씁니다. 같은 입력이면 출력이 바이트 단위로 같습니다.
 
 ## valplay — 비공개
-vrfkit 결과를 받아 스코어보드, ACS, ADR, DDΔ, KAST, FK/FD, 무기·경제·라운드 기여도 등을 보여주는 개인 PC/LAN용 Analyst Desk 웹 서비스입니다.
+vrfkit 결과를 받아 스코어보드, ACS, ADR, HS%, KAST 등 지표와 라운드·경제 분석을 보여 주는 개인 PC/LAN용 분석 웹 서비스입니다.
+
+1. 웹에서 리플레이를 업로드하면 API가 디스크·DB·워커 상태를 확인하고 BullMQ 작업을 만듭니다.
+2. 워커가 `vrfkit export`를 실행하고 Python 파이프라인이 지표를 계산합니다.
+3. 결과 신뢰도를 등급으로 나누고, 권위 있는 값과 어긋나면 결과를 게시하지 않습니다.
+4. 익명화된 결과만 일정 기간 보관하고 원본은 삭제하며, 결과 링크와 별도의 삭제 키를 발급합니다.
+
+## 기술적 포인트
+- **안전성**: 모든 crate에 `#![forbid(unsafe_code)]`
+- **지원 범위**: 게임 빌드 26개 지원, 새 빌드는 변환 등록 한 줄로 추가
+- **교차 검증**: 리플레이 내 이벤트 기록과 대조해 리플레이 71개에서 킬 9,677건 전부 일치
+- **코퍼스 검증**: 고유 리플레이 1,000여 개가 엄격한 검증 기준을 통과. 검증용 리플레이는 SHA-256 카탈로그와 함께 별도 아카이브로 관리
+- **테스트·CI**: Rust 테스트 700여 개, Python 테스트 1,000여 개, Windows·Ubuntu CI, Windows 패키지 릴리스(v0.5.0)
 
 ## 현재
-새 VALORANT 빌드 지원, 데이터 품질 판정, 파서와 분석 결과의 교차 검증을 계속 진행하고 있습니다.
+새 게임 빌드 지원과 데이터 품질 검증을 계속하고 있습니다.

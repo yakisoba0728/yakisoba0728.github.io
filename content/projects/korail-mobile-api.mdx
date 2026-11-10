@@ -1,17 +1,34 @@
 ---
 title: korail-mobile-api
-period: 2026.07
+period: 2026.07 – 2026.10
 role: 개인 프로젝트 · Reverse Engineering / Python SDK
 stack: [Python, httpx, cryptography, MkDocs]
-repo: https://github.com/yakisoba0728/korail-mobile-api
-visibility: public
-status: released
+visibility: private
+status: discontinued
 featured: false
-order: 7
+order: 19
 published: true
 ---
 
 ## 한 줄 소개
-KORAIL 앱의 비공개 모바일 API를 역공학해 Python에서 사용할 수 있도록 만든 typed client library입니다.
+코레일+(구 코레일톡) 앱이 사용하는 모바일 API를 분석해 Python에서 타입이 있는 클라이언트로 사용할 수 있게 만든 라이브러리였습니다.
 
-열차 조회, 좌석, 승차권·예약·마일리지 조회를 지원하고 예약·결제·환불 같은 상태 변경은 명시적인 `MutationConsent`와 기본 `dry_run`을 통과해야만 전송되도록 설계했습니다.
+## 프로젝트 종료
+**한국철도공사(코레일) 측의 연락을 받고 프로젝트를 종료했으며, 저장소를 비공개로 전환했습니다.** GitHub 릴리스와 문서 사이트도 내렸고, 현재는 더 이상 개발하거나 배포하지 않습니다.
+
+## 구조
+- **공개 API** — `KorailClient` 하나로 조회·예약·결제 기능을 제공하고, 예외 계층과 설정을 분리했습니다.
+- **공통 계층** — HTTP 전송, 세션, 암호화, 응답 봉투 파싱, 입력 검증
+- **도메인 모듈** — 열차, 예약, 결제, 승차권, 패스, 공항버스, 체크인을 각각 `forms`(요청) · `parsers`(응답) · `models`(데이터)로 나눴습니다.
+
+## 동작 흐름 — 요청 한 번
+1. 앱과 같은 필드 순서로 요청 폼을 만들고, 앱 화면에서 막는 입력은 미리 검증합니다.
+2. 앱과 같은 방식으로 요청을 보냅니다.
+3. 응답 봉투의 결과 코드로 성공·실패·세션 만료를 판정합니다.
+4. 결과를 dataclass로 변환하고 원문 응답은 `.raw`에 보존합니다.
+
+## 설계 원칙
+- **안전한 상태 변경** — 예약·결제·환불처럼 상태를 바꾸는 요청은 명시적인 동의 객체와 기본 `dry_run`을 거쳐야 전송되고, 자동으로 재전송하지 않습니다.
+- **근거 기반 구현** — 앱 정적 분석과 실제 응답을 근거로 남기고, 실서버 확인 결과를 문서로 기록했습니다.
+- **개인정보 보호** — 로그와 미리보기에서 민감한 값을 가립니다.
+- **품질 관리** — 테스트 500여 개, Python 버전·의존성 매트릭스 CI, 타입 검사와 보안 검사
