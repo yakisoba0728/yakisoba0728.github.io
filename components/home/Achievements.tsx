@@ -14,11 +14,6 @@ const credentials = profile.credentials
   )
   .sort((a, b) => b.year - a.year)
 
-function awardTeam(detail?: string) {
-  if (!detail) return null
-  return detail.match(/OxB4DC0DE|CURIOUS|Curious/)?.[0] ?? null
-}
-
 export default function Achievements() {
   const awards = [...profile.awards].sort((a, b) => b.year - a.year)
   const activities = [...profile.publicActivities].sort((a, b) => b.year - a.year)
@@ -30,19 +25,15 @@ export default function Achievements() {
         <Reveal stagger className="mt-4 overflow-hidden rounded-xl border border-border bg-surface/60">
           {awards.map((award, index) => {
             const showYear = index === 0 || awards[index - 1].year !== award.year
-            const team = awardTeam(award.detail)
             return (
               <div
                 key={`${award.year}-${award.title}`}
                 className="grid gap-1.5 border-b border-border px-4 py-3 last:border-b-0 sm:grid-cols-[120px_1fr] sm:gap-4 md:px-5"
               >
                 <div className="text-[13px] font-medium text-accent">{showYear ? award.year : ''}</div>
-                <div className="min-w-0">
-                  <h3 className="text-[14px] font-semibold leading-snug text-fg">
-                    <T ko={`${award.title} — ${award.result}`} en={`${award.titleEn} — ${award.resultEn}`} />
-                  </h3>
-                  {team && <p className="mt-1 text-[12px] leading-relaxed text-muted">{team}</p>}
-                </div>
+                <h3 className="min-w-0 text-[14px] font-semibold leading-snug text-fg">
+                  <T ko={`${award.title} — ${award.result}`} en={`${award.titleEn} — ${award.resultEn}`} />
+                </h3>
               </div>
             )
           })}
@@ -56,7 +47,7 @@ export default function Achievements() {
             const showYear = index === 0 || credentials[index - 1].year !== credential.year
             return (
               <div
-                key={credential.title}
+                key={`${credential.year}-${credential.title}`}
                 className="grid gap-1.5 border-b border-border px-4 py-3 last:border-b-0 sm:grid-cols-[120px_1fr] sm:gap-4 md:px-5"
               >
                 <div className="text-[13px] font-medium text-accent">{showYear ? credential.year : ''}</div>
@@ -84,9 +75,9 @@ export default function Achievements() {
                   <div className="text-[13px] font-medium text-accent">{period}</div>
                   <div className="min-w-0">
                     <h3 className="text-[14px] font-semibold leading-snug text-fg">
-                      {activity.url ? (
+                      {activity.articles[0] ? (
                         <a
-                          href={activity.url}
+                          href={activity.articles[0].url}
                           target="_blank"
                           rel="noreferrer"
                           className="transition-colors hover:text-accent"
@@ -97,18 +88,13 @@ export default function Achievements() {
                         <T ko={activity.title} en={activity.titleEn} />
                       )}
                     </h3>
-                    {activity.source && (
-                      <p className="mt-1 text-[12px] leading-relaxed text-accent">
-                        {activity.url ? (
-                          <a href={activity.url} target="_blank" rel="noreferrer" className="hover:underline">
-                            <T
-                              ko={`${activity.source} · 기사 보기`}
-                              en={`${activity.sourceEn ?? activity.source} · Read article`}
-                            />
+                    {activity.articles.length > 0 && (
+                      <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[12px] leading-relaxed text-accent">
+                        {activity.articles.map((article) => (
+                          <a key={article.url} href={article.url} target="_blank" rel="noreferrer" className="hover:underline">
+                            <T ko={`${article.source} 기사 ↗`} en={`${article.sourceEn} ↗`} />
                           </a>
-                        ) : (
-                          <T ko={activity.source} en={activity.sourceEn ?? activity.source} />
-                        )}
+                        ))}
                       </p>
                     )}
                     <p className="mt-1 text-[12px] leading-relaxed text-muted">
