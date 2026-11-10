@@ -153,6 +153,17 @@ export const profile: Profile = {
   awards: [
     {
       year: 2026,
+      title: '2026 AI활용 의성군 서비스 개선 공모제안 경진대회',
+      titleEn: '2026 Uiseong County AI Service Improvement Proposal Competition',
+      result: '본선 진출',
+      resultEn: 'Finalist',
+      detail: '2인 1팀 · 서면심사로 12팀 선발',
+      detailEn: 'Two-person team · one of 12 teams selected through document screening',
+      evidence: '본선 진출 이력',
+      evidenceEn: 'Finalist record',
+    },
+    {
+      year: 2026,
       title: '제2회 영남권 사이버공격 방어대회 예선',
       titleEn: '2nd Yeongnam Cyber Attack Defense Competition — Qualifiers',
       result: '공동 1위',
